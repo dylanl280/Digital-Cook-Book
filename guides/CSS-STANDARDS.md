@@ -4,7 +4,8 @@ The cookbook's look comes from a Canva recipe template: greige paper, black ink,
 numerals, thin black photo frames. Nothing else: no accent colour, no rounded corners, no shadows.
 These rules keep every page consistent as the cookbook grows. Most are enforced automatically by
 `python tools/build.py check`, which runs `tools/cookbook/lint.py`. The living reference is
-`styleguide.html` (linked in the site footer), rendered by the same code as the real pages.
+`styleguide.html`, rendered by the same code as the real pages. It isn't linked from the site;
+open it directly (locally, `http://127.0.0.1:8000/Digital-Cook-Book/styleguide.html`).
 
 ## 1. Files and layers
 

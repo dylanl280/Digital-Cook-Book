@@ -76,7 +76,6 @@ def site_footer(site: Site, root: str, count: int) -> str:
   <div class="l-container c-site-footer__inner">
     <p>{esc(site.title)} · {count} recipe{"s" if count != 1 else ""} · {esc(site.tagline)}</p>
     <p>Every recipe credits and links to its original creator.</p>
-    <p><a class="c-site-footer__link" href="{root}styleguide.html">Style guide</a></p>
   </div>
 </footer>"""
 
