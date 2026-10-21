@@ -13,8 +13,4 @@
     font-size: var(--text-sm);
     color: var(--ink-3);
   }
-
-  .c-site-footer__link {
-    color: var(--ink);
-  }
 }
