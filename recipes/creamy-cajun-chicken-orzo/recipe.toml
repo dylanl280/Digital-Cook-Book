@@ -14,12 +14,12 @@ signoff = "Spoon it into bowls while it's hot and enjoy every creamy bite!"
 file = "hero"
 alt = "Creamy Cajun orzo topped with a seared, spiced chicken breast, shaved parmesan and parsley, in a dark bowl"
 focal = "50% 50%"
-credit = "the Instagram reel"
+credit = "@poggiolieats on Instagram"
 credit_url = "https://www.instagram.com/reel/DYNa5BipywA/"
 
 [source]
 kind = "video"
-name = "Instagram reel"
+name = "@poggiolieats on Instagram"
 url = "https://www.instagram.com/reel/DYNa5BipywA/"
 accessed = 2026-10-19
 
@@ -39,7 +39,7 @@ items = [
   "1 cup spinach",
   "1 lemon",
   "Fresh parsley",
-  "Cajun seasoning (the creator uses PoggioliEats)",
+  "PoggioliEats Cajun seasoning, or your favorite Cajun blend",
   "Salt",
   "Black pepper",
 ]
