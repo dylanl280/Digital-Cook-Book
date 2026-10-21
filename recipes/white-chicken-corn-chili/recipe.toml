@@ -15,7 +15,7 @@ cook_minutes = 25
 total_minutes = 45
 signoff = "Ladle it up, pile on your favorite toppings and enjoy every cozy spoonful!"
 notes = [
-  "No cooked chicken? Add 1 1/2 lbs raw chicken with the broth in step 2, then lift it out, shred it and stir it back in before serving.",
+  "No cooked chicken? Add {1 1/2} lbs raw chicken with the broth in step 2, then lift it out, shred it and stir it back in before serving.",
   "For a milder pot, use 1 can of green chilies instead of 2 and leave out the cayenne.",
 ]
 

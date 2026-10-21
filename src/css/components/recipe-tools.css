@@ -1,4 +1,4 @@
-/* Start cooking + servings stepper + clear checks (JavaScript-only, so hidden until the script runs). */
+/* Start cooking + servings stepper + units + clear checks (JavaScript-only, so hidden until the script runs). */
 @layer components {
   .c-recipe-tools {
     display: flex;
@@ -17,9 +17,54 @@
     gap: var(--space-s);
   }
 
-  .c-recipe-tools__hint {
+  /* The hint and Clear checks share a slot that stays as tall as the taller of the two, so checking
+     the first ingredient never moves the list. The hidden button keeps its place (visibility, not
+     display), and is out of the tab order and the accessibility tree while hidden. */
+  .c-recipe-tools__foot {
+    display: grid;
+    grid-template-areas: "slot";
     flex-basis: 100%;
+    align-items: center;
+    justify-items: start;
+  }
+
+  .c-recipe-tools__foot[data-state="empty"] {
+    --clear-visibility: hidden;
+  }
+
+  .c-recipe-tools__hint {
+    grid-area: slot;
+    visibility: var(--hint-visibility, visible);
     font-size: var(--text-sm);
     color: var(--ink-3);
+  }
+
+  .c-recipe-tools__clear {
+    grid-area: slot;
+    visibility: var(--clear-visibility, visible);
+  }
+
+  /* Phones: one slot, the hint until something is checked, then Clear checks in its place. */
+  @media (width < 48rem) {
+    .c-recipe-tools__foot[data-state="checked"] {
+      --hint-visibility: hidden;
+    }
+  }
+
+  /* Wider: the hint stays, and the button's place is held beside it. */
+  @media (width >= 48rem) {
+    .c-recipe-tools__foot {
+      grid-template-areas: "hint clear";
+      grid-template-columns: 1fr auto;
+      column-gap: var(--space-m);
+    }
+
+    .c-recipe-tools__hint {
+      grid-area: hint;
+    }
+
+    .c-recipe-tools__clear {
+      grid-area: clear;
+    }
   }
 }

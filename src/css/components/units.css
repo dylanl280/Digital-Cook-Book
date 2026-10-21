@@ -6,7 +6,7 @@
   }
 
   .c-units__label {
-    margin-inline-end: var(--space-2xs);
+    margin-inline-end: var(--space-xs);
     font: 700 var(--text-xs) / 1 var(--font-label);
     letter-spacing: var(--track-label);
     text-transform: uppercase;
@@ -36,5 +36,15 @@
   .c-units__btn[aria-pressed="true"] {
     --units-bg: var(--ink);
     --units-fg: var(--paper);
+  }
+
+  /* Contrast themes drop background colours, which would leave US and Metric looking the same. */
+  @media (forced-colors: active) {
+    .c-units__btn[aria-pressed="true"] {
+      forced-color-adjust: none;
+      border-color: CanvasText;
+      background: CanvasText;
+      color: Canvas;
+    }
   }
 }

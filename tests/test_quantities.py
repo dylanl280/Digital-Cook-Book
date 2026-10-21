@@ -122,6 +122,18 @@ class HtmlTest(unittest.TestCase):
         self.assertFalse(q.has_unscaled_amounts("Bake at 400°F (200°C) for 20 minutes."))
         self.assertFalse(q.has_unscaled_amounts("Cut into 2-inch pieces."))
 
+    def test_unconverted_step_amounts(self):
+        self.assertTrue(q.has_unconverted_amounts("Pour in 2 cups of the broth."))
+        self.assertTrue(q.has_unconverted_amounts("Add 700–900 ml water."))
+        self.assertFalse(q.has_unconverted_amounts("Pour in {2} cups of the broth."))
+        self.assertFalse(q.has_unconverted_amounts("Toss with 1 tablespoon of the oil."))  # spoons never convert
+        self.assertFalse(q.has_unconverted_amounts("Add 5 large eggs and 2 garlic cloves."))
+
+    def test_rice_cups_count_but_never_convert(self):
+        html = q.render_line(typography("from {3} rice cups"), scale_leading=False)
+        self.assertIn('data-one="cup" data-many="cups"', html)  # so 1/2 reads "1/2 rice cup"
+        self.assertNotIn("data-unit", html)  # a rice cooker's cup is 180 mL, not 240
+
 
 if __name__ == "__main__":
     unittest.main()

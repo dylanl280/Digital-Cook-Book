@@ -63,9 +63,5 @@
   }
 }
 
-/* Cross-document crossfade between pages (ignored where unsupported). */
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition {
-    navigation: auto;
-  }
-}
+/* The crossfade between pages (@view-transition) is opted into by an inline <style> in each page's
+   <head> (tools/cookbook/render.py), not here: see the note there. */

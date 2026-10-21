@@ -52,6 +52,7 @@ METRIC = {"g", "kg", "mg", "ml", "mL", "l", "L", "cl", "dl"}
 ADJECTIVES = {
     "small", "medium", "large", "extra-large", "heaping", "heaped", "level", "scant",
     "generous", "big", "whole", "good",
+    "rice",  # "3 rice cups": a rice cooker's 180 mL cup counts as cups but never converts as one
 }
 COUNT_NOUNS = {
     "lemon": "lemons", "lime": "limes", "orange": "oranges", "onion": "onions",
@@ -414,3 +415,15 @@ def render_line(text: str, *, scale_leading: bool) -> str:
 def has_unscaled_amounts(text: str) -> bool:
     """True when step text mentions an amount with a unit that is not braced (so it won't scale)."""
     return bool(STEP_AMOUNT_RE.search(BRACE_RE.sub("", text)))
+
+
+_CONVERTIBLE_AMOUNT_RE = re.compile(
+    rf"(?<![{{\d/.])(?:{_SINGLE})(?:\s*–\s*{_SINGLE})?\s+(?:"
+    + "|".join(sorted((re.escape(u) for u in CONVERTIBLE), key=len, reverse=True))
+    + r")(?![\w])"
+)
+
+
+def has_unconverted_amounts(text: str) -> bool:
+    """True when step text has an unbraced amount in cups, ounces, grams… (so US/Metric won't change it)."""
+    return bool(_CONVERTIBLE_AMOUNT_RE.search(BRACE_RE.sub("", text)))
