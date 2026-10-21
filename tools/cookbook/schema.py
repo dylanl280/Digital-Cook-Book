@@ -355,7 +355,7 @@ def load_recipe(path: Path, site: Site, issues: Issues) -> Recipe | None:
     if description:
         description = typography(description)
         if "{" in description:
-            issues.error(where, "braces belong only in ingredients and step actions")
+            issues.error(where, "braces belong only in ingredients, step actions and notes")
         if not (80 <= len(description) <= 420):
             issues.error(where, f"description is {len(description)} characters; keep it 80–420")
 
@@ -382,9 +382,10 @@ def load_recipe(path: Path, site: Site, issues: Issues) -> Recipe | None:
     if not isinstance(notes, list) or not all(isinstance(n, str) and n.strip() for n in notes):
         issues.error(where, "notes must be a list of non-empty strings")
         notes = []
-    for text in [signoff or "", *notes]:
-        if "{" in text:
-            issues.error(where, "braces belong only in ingredients and step actions")
+    if signoff and "{" in signoff:
+        issues.error(where, "braces belong only in ingredients, step actions and notes")
+    for note in notes:
+        _check_braces(issues, where, typography(note), leading_allowed=True)
 
     photo = None
     pending = None

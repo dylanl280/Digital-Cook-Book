@@ -37,6 +37,15 @@ class BrokenRecipesTest(unittest.TestCase):
         self.assertEqual(messages(issues, "ERROR") + messages(issues, "WARN"), "")
         self.assertEqual(recipe.total_minutes, 30)
 
+    def test_notes_may_brace_amounts(self):
+        recipe, issues = recipe_from(VALID.replace('prep_minutes = 10', 'prep_minutes = 10\nnotes = ["Makes about {1} cup."]'))
+        self.assertEqual(messages(issues, "ERROR"), "")
+        self.assertEqual(recipe.notes, ["Makes about {1} cup."])
+        self.assertError(VALID.replace('prep_minutes = 10', 'prep_minutes = 10\nnotes = ["Rest it for {10} minutes."]'),
+                         "only amounts scale")
+        self.assertError(VALID.replace('prep_minutes = 10', 'prep_minutes = 10\nsignoff = "Enjoy {1} bowl!"'),
+                         "braces belong only")
+
     def test_unknown_key_suggests(self):
         self.assertError(VALID.replace("prep_minutes", "prep_minute"), "did you mean 'prep_minutes'")
 

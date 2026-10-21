@@ -106,71 +106,106 @@
     kg: { sys: "metric", g: 1000 }
   };
 
-  /* convert(1.5, null, "cup", "metric") → { lo: "360", hi: null, one: "mL", many: "mL" } */
-  function convert(lo, hi, unit, target) {
+  /* US amounts snap to what measuring cups and spoons hold: cups in quarters and thirds,
+     tablespoons in halves, teaspoons down to 1/8, ounces and pounds in quarters. */
+  var CUP_STEPS = [0, 1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4, 1];
+  var TBSP_STEPS = [0, 1 / 2, 1];
+  var TSP_STEPS = [0, 1 / 8, 1 / 4, 1 / 2, 3 / 4, 1];
+  var QUARTER_STEPS = [0, 1 / 4, 1 / 2, 3 / 4, 1];
+
+  function snap(value, steps) {
+    var whole = Math.floor(value);
+    var best = steps.reduce(function (a, b) {
+      return Math.abs(value - whole - b) < Math.abs(value - whole - a) ? b : a;
+    });
+    return Math.max(whole + best, steps[1]);  /* never round a real amount down to nothing */
+  }
+  function measured(steps) { return function (v) { return formatAmount(snap(v, steps), "frac"); }; }
+  function ounces(v) {
+    var s = snap(v, QUARTER_STEPS);
+    return s >= 10 ? String(roundHalfUp(v)) : formatAmount(s, "frac");
+  }
+  function metric(v) { return formatAmount(v, "metric"); }
+  function tenths(v) { return formatAmount(v, "dec", 1); }
+
+  /* Each system's units from small to large: [size in mL or g, unit, format, next unit from]. */
+  var LADDERS = {
+    "us ml": [[5, "tsp", measured(TSP_STEPS), 3], [15, "tbsp", measured(TBSP_STEPS), 4],
+      [240, "cup", measured(CUP_STEPS)]],
+    "us g": [[28.35, "oz", ounces, 16], [453.6, "lb", measured(QUARTER_STEPS)]],
+    "metric ml": [[1, "ml", metric, 1000], [1000, "l", tenths]],
+    "metric g": [[1, "g", metric, 1000], [1000, "kg", tenths]]
+  };
+  var UNIT_WORDS = {
+    tsp: ["tsp", "tsp"], tbsp: ["tbsp", "tbsp"], cup: ["cup", "cups"], oz: ["oz", "oz"], lb: ["lb", "lb"],
+    ml: ["mL", "mL"], l: ["L", "L"], g: ["g", "g"], kg: ["kg", "kg"]
+  };
+
+  /* measure(700, 900, "ml", "us") → { lo: "3", hi: "3 3/4", unit: "cup" }. The unit suits the
+     smaller end and is chosen after rounding, so 15.9 oz reads "1 lb", never "16 oz". */
+  function measure(lo, hi, unit, system) {
     var info = UNIT_INFO[unit];
-    var top = hi === null ? lo : hi;
-    function pick(per, kind, places, one, many) {
-      return {
-        lo: formatAmount(lo / per, kind, places),
-        hi: hi === null ? null : formatAmount(hi / per, kind, places),
-        one: one, many: many
-      };
-    }
-    if (target === "metric") {
-      if (info.ml) {
-        return top * info.ml >= 1000 ? pick(1000 / info.ml, "dec", 1, "L", "L")
-          : pick(1 / info.ml, "metric", 0, "mL", "mL");
+    var dim = info.ml ? "ml" : "g";
+    var ladder = LADDERS[system + " " + dim];
+    for (var i = 0; i < ladder.length; i++) {
+      var rung = ladder[i];
+      var loText = rung[2](lo * info[dim] / rung[0]);
+      if (i === ladder.length - 1 || amountValue(loText) < rung[3]) {
+        return { lo: loText, hi: hi === null ? null : rung[2](hi * info[dim] / rung[0]), unit: rung[1] };
       }
-      return top * info.g >= 1000 ? pick(1000 / info.g, "dec", 1, "kg", "kg")
-        : pick(1 / info.g, "metric", 0, "g", "g");
     }
-    if (info.ml) {
-      var ml = top * info.ml;
-      if (ml < 15) return pick(5 / info.ml, "frac", 0, "tsp", "tsp");
-      if (ml < 60) return pick(15 / info.ml, "frac", 0, "tbsp", "tbsp");
-      return pick(240 / info.ml, "frac", 0, "cup", "cups");
-    }
-    var oz = top * info.g / 28.35;
-    if (oz >= 16) return pick(453.6 / info.g, "frac", 0, "lb", "lb");
-    return pick(28.35 / info.g, oz >= 10 ? "int" : "frac", 0, "oz", "oz");
   }
 
   var originals = new Map();
 
-  /* Show every amount at `factor` × the recipe, converted into `target` ("us"/"metric") when the
-     reader has switched away from the recipe's own system (target null = as written). */
+  function parts(el) {
+    var n = el.querySelector("[data-qty-n]");
+    var u = el.querySelector("[data-one]");
+    if (!originals.has(n)) originals.set(n, Array.prototype.slice.call(n.childNodes));
+    if (u && !originals.has(u)) originals.set(u, u.textContent);
+    return { n: n, u: u };
+  }
+
+  /* Show every amount at `factor` × the recipe, in `target` ("us"/"metric") when the reader has
+     switched away from the recipe's own system (target null = the recipe's own). Amounts with a unit
+     are measured afresh whenever they change; at 1× in the recipe's system they read as written. */
   function applyAmounts(factor, target) {
     $$("[data-q]").forEach(function (el) {
-      var n = el.querySelector("[data-qty-n]");
-      var u = el.querySelector("[data-one]");
-      if (!originals.has(n)) originals.set(n, Array.prototype.slice.call(n.childNodes));
-      if (u && !originals.has(u)) originals.set(u, u.textContent);
+      var shown = parts(el);
+      var src = el;
       var unit = el.getAttribute("data-unit");
-      var converting = target && unit && UNIT_INFO[unit] && UNIT_INFO[unit].sys !== target;
-      if (factor === 1 && !converting) {
-        n.textContent = "";
-        originals.get(n).forEach(function (node) { n.appendChild(node); });
-        if (u) u.textContent = originals.get(u);
+      var into = target && UNIT_INFO[unit] && UNIT_INFO[unit].sys !== target ? target : null;
+      /* "7–8 oz (200–250 g)": in Metric, the source's own 200–250 g beats a conversion of 7–8 oz */
+      var alt = into && el.parentElement.querySelector(":scope > [data-qty-alt] [data-q]");
+      var altInfo = alt && UNIT_INFO[alt.getAttribute("data-unit")];
+      if (altInfo && altInfo.sys === into) { src = alt; into = null; }
+      var from = parts(src);
+      if (factor === 1 && !into) {
+        shown.n.textContent = "";
+        originals.get(from.n).forEach(function (node) { shown.n.appendChild(node.cloneNode(true)); });
+        if (shown.u) shown.u.textContent = originals.get(from.u);
         return;
       }
-      var sep = el.getAttribute("data-sep") || "–";
-      var lo = Number(el.getAttribute("data-q")) * factor;
-      var hi = el.hasAttribute("data-q-max") ? Number(el.getAttribute("data-q-max")) * factor : null;
-      var loText, hiText, one, many;
-      if (converting) {
-        var c = convert(lo, hi, unit, target);
-        loText = c.lo; hiText = c.hi; one = c.one; many = c.many;
+      var lo = Number(src.getAttribute("data-q")) * factor;
+      var hi = src.hasAttribute("data-q-max") ? Number(src.getAttribute("data-q-max")) * factor : null;
+      var srcUnit = src.getAttribute("data-unit");
+      var loText, hiText, words;
+      if (UNIT_INFO[srcUnit]) {
+        var m = measure(lo, hi, srcUnit, into || UNIT_INFO[srcUnit].sys);
+        loText = m.lo; hiText = m.hi;
+        words = m.unit === srcUnit ? [from.u.getAttribute("data-one"), from.u.getAttribute("data-many")]
+          : UNIT_WORDS[m.unit];
       } else {
-        var kind = el.getAttribute("data-fmt");
-        var places = Number(el.getAttribute("data-places") || 0);
+        var kind = src.getAttribute("data-fmt");
+        var places = Number(src.getAttribute("data-places") || 0);
         loText = formatAmount(lo, kind, places);
         hiText = hi === null ? null : formatAmount(hi, kind, places);
-        if (u) { one = u.getAttribute("data-one"); many = u.getAttribute("data-many"); }
+        if (shown.u) words = [shown.u.getAttribute("data-one"), shown.u.getAttribute("data-many")];
       }
+      var sep = src.getAttribute("data-sep") || "–";
       var top = hiText === null ? loText : hiText;
-      setAmount(n, hiText === null || hiText === loText ? loText : loText + sep + hiText);
-      if (u) u.textContent = amountValue(top) > 1 ? many : one;
+      setAmount(shown.n, hiText === null || hiText === loText ? loText : loText + sep + hiText);
+      if (shown.u) shown.u.textContent = amountValue(top) > 1 ? words[1] : words[0];
     });
     /* "1/3 cup (80 mL)": hide the source's own conversion once the switch has converted the line */
     $$("[data-qty-alt]").forEach(function (alt) {
@@ -203,11 +238,12 @@
     var boxes = $$("[data-check]");
     function syncChecks() {
       boxes.forEach(function (box) { box.checked = state.checks.indexOf(box.getAttribute("data-check")) !== -1; });
+      var empty = state.checks.length === 0;
       jsAll("clear-checks").forEach(function (btn) {
-        var hide = state.checks.length === 0;
-        if (hide && doc.activeElement === btn && boxes[0]) boxes[0].focus();
-        btn.hidden = hide;
+        if (empty && doc.activeElement === btn && boxes[0]) boxes[0].focus();
       });
+      /* the button keeps its room while hidden (see recipe-tools.css), so nothing below it moves */
+      jsAll("checks-slot").forEach(function (slot) { slot.setAttribute("data-state", empty ? "empty" : "checked"); });
     }
     boxes.forEach(function (box) {
       box.addEventListener("change", function () {
@@ -250,6 +286,13 @@
         renderServings();
       });
     });
+    /* follow a choice made in another tab, or on another recipe before Back restored this one */
+    function syncUnits() {
+      var saved = store.get("dcb:units") || "us";
+      if (saved !== units) { units = saved; renderServings(); }
+    }
+    window.addEventListener("pageshow", function (e) { if (e.persisted) syncUnits(); });
+    window.addEventListener("storage", function (e) { if (e.key === "dcb:units") syncUnits(); });
 
     function renderServings() {
       applyAmounts(factor(), target());
@@ -267,7 +310,10 @@
         note.hidden = factor() === 1;
       });
       var scaleNote = js("scale-note");
-      if (scaleNote) scaleNote.hidden = factor() === 1 && !target();
+      if (scaleNote) {
+        scaleNote.hidden = !((factor() !== 1 && scaleNote.hasAttribute("data-unscaled")) ||
+          (target() && scaleNote.hasAttribute("data-unconverted")));
+      }
       /* aria-disabled instead of disabled, so keyboard focus never drops off the button */
       jsAll("stepper-dec").forEach(function (b) { b.setAttribute("aria-disabled", String(atMin())); });
       jsAll("stepper-inc").forEach(function (b) { b.setAttribute("aria-disabled", String(atMax())); });
@@ -768,14 +814,13 @@
   }
 
   /* The CSS page crossfade (@view-transition) rejects its promises when a quick second
-     navigation interrupts it. That's expected, so don't let it surface as an uncaught error. */
-  ["pageswap", "pagereveal"].forEach(function (type) {
-    window.addEventListener(type, function (e) {
-      var vt = e.viewTransition;
-      if (!vt) return;
-      ["ready", "finished", "updateCallbackDone"].forEach(function (name) {
-        if (vt[name] && vt[name].catch) vt[name].catch(function () { /* interrupted: fine */ });
-      });
+     navigation interrupts it. That's expected, so don't let it surface as an uncaught error.
+     (The new page's side, pagereveal, is handled by the inline script in <head>.) */
+  window.addEventListener("pageswap", function (e) {
+    var vt = e.viewTransition;
+    if (!vt) return;
+    ["ready", "finished", "updateCallbackDone"].forEach(function (name) {
+      if (vt[name] && vt[name].catch) vt[name].catch(function () { /* interrupted: fine */ });
     });
   });
 
@@ -802,10 +847,19 @@
       });
     });
     if (media && media.addEventListener) media.addEventListener("change", sync);
+    /* same for a theme picked in another tab, or before Back restored this page */
+    function restore() {
+      var saved = store.get("dcb:theme");
+      if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+      else root.removeAttribute("data-theme");
+      sync();
+    }
+    window.addEventListener("pageshow", function (e) { if (e.persisted) restore(); });
+    window.addEventListener("storage", function (e) { if (e.key === "dcb:theme") restore(); });
     sync();
   }
 
-  window.Cookbook = { formatAmount: formatAmount, amountValue: amountValue };
+  window.Cookbook = { formatAmount: formatAmount, amountValue: amountValue, measure: measure };
   safe(initTheme);
   safe(initTimers);
   var article = js("recipe");

@@ -74,6 +74,28 @@ class EscapingTest(unittest.TestCase):
         self.assertIn("<!--<script>", json.loads(payload)["description"])
 
 
+class AmountsTest(unittest.TestCase):
+    def note(self, actions):
+        recipe, issues = recipe_from(VALID.replace('["Simmer the water for 20 minutes."]', actions))
+        self.assertIsNotNone(recipe, [str(i) for i in issues])
+        return re.search(r'<p class="c-recipe__note"[^>]*>', render.recipe_main(site(), recipe))
+
+    def test_steps_note_says_when_it_applies(self):
+        self.assertIsNone(self.note('["Add the {1} cup of water."]'))
+        spoon = self.note('["Stir in 1 tablespoon of the oil."]').group(0)  # scales no, converts never
+        self.assertIn("data-unscaled", spoon)
+        self.assertNotIn("data-unconverted", spoon)
+        cup = self.note('["Add 1 cup of the water."]').group(0)
+        self.assertIn("data-unscaled", cup)
+        self.assertIn("data-unconverted", cup)
+
+    def test_notes_scale_and_convert(self):
+        recipe, _ = recipe_from(VALID.replace('prep_minutes = 10', 'prep_minutes = 10\nnotes = ["Makes about {1} cup."]'))
+        html = render.notes_block(recipe)
+        self.assertIn('data-unit="cup"', html)
+        self.assertNotIn("{", html)
+
+
 class CssTest(unittest.TestCase):
     def test_stylesheets_follow_the_standards(self):
         issues = Issues()

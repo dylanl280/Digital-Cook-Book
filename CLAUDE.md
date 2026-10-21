@@ -62,7 +62,7 @@ Dev tools (pypdf, Pillow, Playwright) are in `requirements-dev.txt`; the build i
   ("1 cup" → "2 cups", "1 white onion" → "2 white onions"). Clean up source junk:
   `"(, chopped)"` → `", chopped"`, `"((note))"` → `"(note)"`, `"2 4 oz cans"` → `"2 (4 oz) cans"`.
   Use ingredient groups (`group = "For the dressing"`) when the source has sections.
-- **Scalable extra amounts go in braces** in ingredients and step text: `"1/3 cup ({80} mL) oil"`,
+- **Scalable extra amounts go in braces** in ingredients, step text and kitchen notes: `"1/3 cup ({80} mL) oil"`,
   `"7–8 oz ({200–250} g) sirloin steak"`, `"Toss with {1} tablespoon of the oil"`. Never brace the leading
   amount, a time or a temperature.
 - **Steps:** 3–9 titled steps (titles are 1–3 words, no colon), 1–4 short actions each, **in our own words**.
@@ -86,7 +86,9 @@ Dev tools (pypdf, Pillow, Playwright) are in `requirements-dev.txt`; the build i
   `formatAmount` must stay identical to `quantities.format_amount` (the e2e test compares them).
 - US/Metric switch: the build tags convertible amounts (`data-unit`; cups, oz, lb, pints, quarts,
   gallons, g, kg, mL, L, but never spoons) and wraps a source's own conversion, as in `1/3 cup ({80} mL)`,
-  in `data-qty-alt`. `cookbook.js` converts them, with US as the default.
+  in `data-qty-alt`. `cookbook.js` converts them, with US as the default: it prefers the source's own
+  conversion, snaps US amounts to measurable sizes (cups in quarters and thirds, tbsp in halves), and picks
+  the unit after rounding (16 oz reads "1 lb"). Any amount that changes is re-measured the same way.
 - Python reads files with `encoding="utf-8-sig"` and writes them with `encoding="utf-8"`. Windows defaults to cp1252.
 
 ## Publishing

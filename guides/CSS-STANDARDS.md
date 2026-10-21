@@ -87,6 +87,9 @@ everything else.
     inside `@media (hover: hover)`. Decorative generated content uses alt text: `content: ":" / ""`.
     Lists styled with `list-style: none` get `role="list"`.
 12. **Motion** animates only `transform` and `opacity`, inside `prefers-reduced-motion: no-preference`.
+    The one exception to "all CSS lives in `src/css/`": the page crossfade's `@view-transition` opt-in is
+    an inline `<style>` in every page's `<head>` (`CROSSFADE` in `render.py`). In the stylesheet, Chrome
+    can read the opt-in before the sheet has loaded and cancel the crossfade.
 13. **Inline styles** may only set per-instance custom properties (`style="--focal: 50% 40%"`).
 14. **Data stays Title Case**; uppercase is `text-transform`.
 

@@ -35,6 +35,7 @@ def page(site: Site, assets: Assets, *, title: str, description: str, root: str,
 {robots}<meta name="theme-color" content="#F0EBE8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1A1816" media="(prefers-color-scheme: dark)">
 {THEME_BOOTSTRAP}
+{CROSSFADE}
 {canonical_tag}<link rel="icon" href="{root}assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="{root}assets/fonts/red-hat-text.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{root}assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
@@ -55,9 +56,17 @@ def page(site: Site, assets: Assets, *, title: str, description: str, root: str,
 
 
 # Applies a saved theme before the first paint, so a dark-mode reader never sees a flash of paper.
+# It also quiets the page crossfade's promises when a quick navigation interrupts it: pagereveal can
+# fire before the deferred cookbook.js runs, so that listener has to be here.
 THEME_BOOTSTRAP = ('<script>try{var t=JSON.parse(localStorage.getItem("dcb:theme"));'
                    'if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}'
-                   'catch(e){}</script>')
+                   'catch(e){}addEventListener("pagereveal",function(e){var v=e.viewTransition;'
+                   'if(v)[v.ready,v.finished,v.updateCallbackDone].forEach(function(p){'
+                   'if(p)p.catch(function(){})})})</script>')
+# Crossfade between pages (ignored where unsupported). Inline rather than in cookbook.css: when the
+# stylesheet is still downloading, Chrome can decide the new page opted out and cancel the crossfade.
+CROSSFADE = ('<style>@media (prefers-reduced-motion: no-preference) '
+             '{ @view-transition { navigation: auto; } }</style>')
 MOON_ICON = ('<svg class="c-theme-toggle__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
              '<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z" stroke="currentColor" '
              'stroke-width="1.6" stroke-linejoin="round"/></svg>')
@@ -255,28 +264,32 @@ def recipe_units(recipe: Recipe) -> str | None:
     return quantities.unit_system(lines) or quantities.unit_system([a for s in recipe.steps for a in s.actions])
 
 
-def units_switch(units: str | None) -> str:
+def units_switch(units: str | None, pressed: str = "us") -> str:
     """US | Metric toggle (cookbook.js converts cups, ounces, pounds, pints ↔ mL, g, kg, L).
     US is the default; metric recipes are converted unless the reader picks Metric."""
     if not units:
         return ""
     buttons = "".join(
         f'<button type="button" class="c-units__btn" data-js="units-btn" data-units="{key}" '
-        f'aria-pressed="{"true" if key == "us" else "false"}">{label}</button>'
+        f'aria-pressed="{"true" if key == pressed else "false"}">{label}</button>'
         for key, label in (("us", "US"), ("metric", "Metric")))
     return (f'<div class="c-units" data-js="units" role="group" aria-label="Units" hidden>'
             f'<span class="c-units__label" aria-hidden="true">Units</span>{buttons}</div>')
 
 
 def tools_block(recipe: Recipe) -> str:
+    # The hint and Clear checks share a slot that keeps its size, so ticking the first ingredient
+    # never pushes the list down under the reader's finger.
     return f"""    <div class="c-recipe-tools" data-js="tools" hidden>
       <button type="button" class="c-button c-button--primary" data-js="cook-open">Start cooking</button>
       <div class="c-recipe-tools__group">
         {stepper(recipe)}
         {units_switch(recipe_units(recipe))}
-        <button type="button" class="c-button" data-js="clear-checks" hidden>Clear checks</button>
       </div>
-      <p class="c-recipe-tools__hint">Tap an ingredient or step to check it off, or a time to start a timer.</p>
+      <div class="c-recipe-tools__foot" data-js="checks-slot" data-state="empty">
+        <p class="c-recipe-tools__hint">Tap an ingredient or step to check it off, or a time to start a timer.</p>
+        <button type="button" class="c-button c-recipe-tools__clear" data-js="clear-checks">Clear checks</button>
+      </div>
     </div>"""
 
 
@@ -327,7 +340,7 @@ def gallery_block(recipe: Recipe) -> str:
 def notes_block(recipe: Recipe) -> str:
     if not recipe.notes:
         return ""
-    items = "".join(f"<li>{quantities.text_html(note)}</li>" for note in recipe.notes)
+    items = "".join(f"<li>{quantities.render_line(note, scale_leading=False)}</li>" for note in recipe.notes)
     return f"""    <section class="c-notes" aria-labelledby="notes">
       <h2 class="c-section-title" id="notes">Kitchen Notes</h2>
       <ul class="c-notes__list">{items}</ul>
@@ -360,9 +373,14 @@ def recipe_main(site: Site, recipe: Recipe) -> str:
                  + "</figure>")
     else:
         media = plate(recipe.title, "c-recipe-hero__media")
-    unscaled = any(quantities.has_unscaled_amounts(a) for step in recipe.steps for a in step.actions)
-    scale_note = ('\n      <p class="c-recipe__note" data-js="scale-note" hidden>Amounts in the steps are '
-                  'for the original recipe.</p>') if unscaled else ""
+    # Shown by cookbook.js only when it applies: scaling with unbraced step amounts, or switching
+    # US/Metric with unbraced cups, ounces, grams… in the steps.
+    actions = [a for step in recipe.steps for a in step.actions]
+    marks = "".join(mark for mark, found in (
+        (" data-unscaled", any(quantities.has_unscaled_amounts(a) for a in actions)),
+        (" data-unconverted", any(quantities.has_unconverted_amounts(a) for a in actions))) if found)
+    scale_note = (f'\n      <p class="c-recipe__note" data-js="scale-note"{marks} hidden>Amounts in the steps '
+                  'are as written in the original recipe.</p>') if marks else ""
     signoff = f'\n    <p class="c-signoff">{esc(recipe.signoff)}</p>' if recipe.signoff else ""
     serves = recipe.serves[0] if recipe.serves else ""
     units = recipe_units(recipe) or ""
@@ -508,6 +526,8 @@ def styleguide_main(site: Site, samples: list[Recipe]) -> str:
       <button type="button" class="c-button" disabled>Disabled</button></div></div>
     <div class="c-styleguide__row"><p class="c-styleguide__label">Steppers</p><div class="l-cluster">
       {_static(stepper(sample))} {_static(stepper(batch))}</div></div>
+    <div class="c-styleguide__row"><p class="c-styleguide__label">Units switch · US, Metric</p><div class="l-cluster">
+      {_static(units_switch("us"))} {_static(units_switch("metric", pressed="metric"))}</div></div>
     <div class="c-styleguide__row"><p class="c-styleguide__label">Timer chips · idle, running</p><div class="l-cluster">
       {_static(chip)} {_static(chip).replace('class="c-timer-chip"', 'class="c-timer-chip" data-state="running"')}</div></div>
     <div class="c-styleguide__row"><p class="c-styleguide__label">Timer tray · running, done</p>

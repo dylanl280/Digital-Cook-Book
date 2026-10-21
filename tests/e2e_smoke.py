@@ -6,7 +6,8 @@ Needs Playwright (pip install -r requirements-dev.txt) and drives the installed 
 no browser download is required. It builds the site with the search toolbar forced on, serves it
 like GitHub Pages, and checks: card links, search + chips, the servings stepper, typeset fractions,
 the JS/Python amount formatter match, check-off persistence, cook mode (keyboard, buttons, swipe,
-Ingredients jump, resume, wake-lock status) and a timer running to "done" on a fake clock.
+Ingredients jump, resume, wake-lock status), a timer running to "done" on a fake clock, the US/Metric
+switch and dark mode.
 Screenshots land in inbox/screens/. Exit code 1 on any failure.
 """
 from __future__ import annotations
@@ -92,7 +93,7 @@ def run(browser, base: str, recipes) -> None:
     except Exception:  # older Playwright: wake lock may still be granted by default
         pass
     page = ctx.new_page()
-    page.on("pageerror", lambda exc: errors.append(str(exc)))
+    page.on("pageerror", lambda exc: errors.append(f"main {page.url}: {exc} {exc.stack}"))
 
     # --- home -------------------------------------------------------------------------------------------
     page.goto(base, wait_until="networkidle")
@@ -141,8 +142,11 @@ def run(browser, base: str, recipes) -> None:
 
     # --- check-offs persist ------------------------------------------------------------------------------
     first = page.locator(".c-recipe .c-ingredients .c-check__box").first
+    tools_height = lambda pg: pg.locator(".c-recipe-tools").bounding_box()["height"]  # noqa: E731
+    before = tools_height(page)
     page.locator(".c-recipe .c-ingredients .c-check__label").first.click()
     check("tapping an ingredient checks it", first.is_checked())
+    check("checking doesn't move the list", tools_height(page) == before, f"{before} → {tools_height(page)}")
     page.reload(wait_until="networkidle")
     first = page.locator(".c-recipe .c-ingredients .c-check__box").first
     check("checks survive a reload", first.is_checked())
@@ -185,8 +189,11 @@ def run(browser, base: str, recipes) -> None:
     page.keyboard.press("Escape")
 
     # --- timers on a fake clock -------------------------------------------------------------------------------
-    timer_page = ctx.new_page()
-    timer_page.on("pageerror", lambda exc: errors.append(str(exc)))
+    # its own context: the fake clock covers every page in a context, and a second copy of the recipe
+    # would race this one to finish the timer (by design, only the page that finishes it announces it)
+    timer_ctx = browser.new_context(viewport={"width": 1280, "height": 900})
+    timer_page = timer_ctx.new_page()
+    timer_page.on("pageerror", lambda exc: errors.append(f"timer {timer_page.url}: {exc} {exc.stack}"))
     timer_page.clock.install()
     timer_page.goto(base + "recipes/marry-me-chicken.html", wait_until="networkidle")
     chip = timer_page.locator('.c-recipe [data-js="timer"]').first
@@ -207,7 +214,7 @@ def run(browser, base: str, recipes) -> None:
     check("finish is announced", announced.startswith("Timer done"), announced)
     timer_page.click('[data-js="timer-list"] [data-act="cancel"]')
     check("dismissed timer leaves the tray", timer_page.is_hidden('[data-js="timer-tray"]'))
-    timer_page.close()
+    timer_ctx.close()
 
     # --- US / metric (US by default; the choice is remembered across recipes) ---------------------------------
     units_page = ctx.new_page()
@@ -216,8 +223,14 @@ def run(browser, base: str, recipes) -> None:
     pressed = lambda pg: pg.get_attribute('.c-recipe-tools [data-js="units-btn"][aria-pressed="true"]', "data-units")  # noqa: E731
     check("units default to US", pressed(units_page) == "us", str(pressed(units_page)))
     check("metric recipe converts to US", line(units_page, "onion").startswith("11 oz onion"), line(units_page, "onion"))
-    check("US volumes read in cups", line(units_page, "other liquid").startswith("2 7⁄8–3 3⁄4 cups water"),
+    check("US volumes snap to measuring cups", line(units_page, "other liquid").startswith("3–3 3⁄4 cups water"),
           line(units_page, "other liquid"))
+    for _ in range(3):
+        units_page.click('.c-recipe-tools [data-js="stepper-inc"]')
+    check("the unit is picked after rounding (450 g → 1 lb)", line(units_page, "onion").startswith("1 lb onion"),
+          line(units_page, "onion"))
+    for _ in range(3):
+        units_page.click('.c-recipe-tools [data-js="stepper-dec"]')
     units_page.click('.c-recipe-tools [data-js="units-btn"][data-units="metric"]')
     check("Metric shows the grams as written", line(units_page, "onion").startswith("300 g onion"), line(units_page, "onion"))
     units_page.goto(base + "recipes/marry-me-chicken.html", wait_until="networkidle")
@@ -232,6 +245,27 @@ def run(browser, base: str, recipes) -> None:
     units_page.click('.c-recipe-tools [data-js="units-btn"][data-units="us"]')
     oil = line(units_page, "avocado")
     check("back to US restores the source's wording", oil.startswith("1⁄2 cup (120 mL) avocado"), oil)
+    units_page.click('.c-recipe-tools [data-js="units-btn"][data-units="metric"]')
+    units_page.goto(base + "recipes/thai-steak-salad.html", wait_until="networkidle")
+    check("Metric uses the source's own grams", line(units_page, "sirloin").startswith("200–250 g sirloin"),
+          line(units_page, "sirloin"))
+    units_page.click('.c-recipe-tools [data-js="stepper-dec"]')
+    check("…and scales them", line(units_page, "sirloin").startswith("100–125 g sirloin"), line(units_page, "sirloin"))
+    units_page.goto(base + "recipes/chicken-and-gnocchi-soup.html", wait_until="networkidle")
+    for _ in range(2):  # 1× → 1½× → 2×
+        units_page.click('.c-recipe-tools [data-js="stepper-inc"]')
+    check("1000 g reads 1 kg", line(units_page, "gnocchi").startswith("1 kg gnocchi"), line(units_page, "gnocchi"))
+    other = ctx.new_page()
+    other.goto(base + "recipes/marry-me-chicken.html", wait_until="networkidle")
+    units_page.click('.c-recipe-tools [data-js="units-btn"][data-units="us"]')
+    try:
+        other.wait_for_function("document.querySelector('.c-recipe-tools [data-js=\"units-btn\"][aria-pressed=\"true\"]')"
+                                ".dataset.units === 'us'", timeout=3000)
+    except Exception:  # reported by the check below
+        pass
+    check("another open tab follows the switch", line(other, "chicken stock").startswith("1 cup chicken stock"),
+          line(other, "chicken stock"))
+    other.close()
     units_page.close()
 
     # --- batch recipes: "Makes 1 pizza (2× batch)" ---------------------------------------------------------
@@ -247,6 +281,11 @@ def run(browser, base: str, recipes) -> None:
     phone = browser.new_context(viewport={"width": 390, "height": 844}).new_page()
     phone.goto(base + "recipes/marry-me-chicken.html", wait_until="networkidle")
     phone.screenshot(path=str(SHOTS / "e2e-recipe-phone.png"), full_page=True)
+    before = tools_height(phone)
+    phone.locator(".c-recipe .c-ingredients .c-check__label").first.click()
+    swapped = phone.is_visible('.c-recipe-tools [data-js="clear-checks"]') and phone.is_hidden(".c-recipe-tools__hint")
+    check("on a phone, Clear checks takes the hint's place", swapped and tools_height(phone) == before,
+          f"swapped={swapped}, {before} → {tools_height(phone)}")
     phone.goto(base, wait_until="networkidle")
     focused = ""
     for _ in range(6):  # skip link → dark-mode toggle → (search) → first card
@@ -261,7 +300,7 @@ def run(browser, base: str, recipes) -> None:
     paper = lambda pg: pg.evaluate("getComputedStyle(document.documentElement).backgroundColor")  # noqa: E731
     dark_ctx = browser.new_context(viewport={"width": 1280, "height": 900}, color_scheme="dark")
     dark = dark_ctx.new_page()
-    dark.on("pageerror", lambda exc: errors.append(str(exc)))
+    dark.on("pageerror", lambda exc: errors.append(f"dark {dark.url}: {exc} {exc.stack}"))
     dark.goto(base, wait_until="networkidle")
     check("dark device → dark paper", paper(dark) == "rgb(26, 24, 22)", paper(dark))
     check("toggle shows dark mode is on", dark.get_attribute('[data-js="theme-toggle"]', "aria-pressed") == "true")
