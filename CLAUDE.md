@@ -84,6 +84,9 @@ Dev tools (pypdf, Pillow, Playwright) are in `requirements-dev.txt`; the build i
 - JS (`src/js/cookbook.js`): one classic deferred script; hooks are `data-js` attributes, never CSS classes;
   each feature starts inside `safe()`; storage access is wrapped in try/catch.
   `formatAmount` must stay identical to `quantities.format_amount` (the e2e test compares them).
+- US/Metric switch: the build tags convertible amounts (`data-unit`; cups, oz, lb, pints, quarts,
+  gallons, g, kg, mL, L, but never spoons) and wraps a source's own conversion, as in `1/3 cup ({80} mL)`,
+  in `data-qty-alt`. `cookbook.js` converts them, with US as the default.
 - Python reads files with `encoding="utf-8-sig"` and writes them with `encoding="utf-8"`. Windows defaults to cp1252.
 
 ## Publishing

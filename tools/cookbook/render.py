@@ -226,11 +226,31 @@ def stepper(recipe: Recipe) -> str:
             f'</div>')
 
 
+def recipe_units(recipe: Recipe) -> str | None:
+    """The recipe's own measuring system ("us"/"metric"), or None when nothing converts."""
+    lines = [item for group in recipe.ingredients for item in group.items]
+    return quantities.unit_system(lines) or quantities.unit_system([a for s in recipe.steps for a in s.actions])
+
+
+def units_switch(units: str | None) -> str:
+    """US | Metric toggle (cookbook.js converts cups, ounces, pounds, pints ↔ mL, g, kg, L).
+    US is the default; metric recipes are converted unless the reader picks Metric."""
+    if not units:
+        return ""
+    buttons = "".join(
+        f'<button type="button" class="c-units__btn" data-js="units-btn" data-units="{key}" '
+        f'aria-pressed="{"true" if key == "us" else "false"}">{label}</button>'
+        for key, label in (("us", "US"), ("metric", "Metric")))
+    return (f'<div class="c-units" data-js="units" role="group" aria-label="Units" hidden>'
+            f'<span class="c-units__label" aria-hidden="true">Units</span>{buttons}</div>')
+
+
 def tools_block(recipe: Recipe) -> str:
     return f"""    <div class="c-recipe-tools" data-js="tools" hidden>
       <button type="button" class="c-button c-button--primary" data-js="cook-open">Start cooking</button>
       <div class="c-recipe-tools__group">
         {stepper(recipe)}
+        {units_switch(recipe_units(recipe))}
         <button type="button" class="c-button" data-js="clear-checks" hidden>Clear checks</button>
       </div>
       <p class="c-recipe-tools__hint">Tap an ingredient or step to check it off, or a time to start a timer.</p>
@@ -322,7 +342,8 @@ def recipe_main(site: Site, recipe: Recipe) -> str:
                   'for the original recipe.</p>') if unscaled else ""
     signoff = f'\n    <p class="c-signoff">{esc(recipe.signoff)}</p>' if recipe.signoff else ""
     serves = recipe.serves[0] if recipe.serves else ""
-    return f"""<article class="l-sheet c-recipe" data-js="recipe" data-slug="{recipe.slug}" data-serves="{serves}">
+    units = recipe_units(recipe) or ""
+    return f"""<article class="l-sheet c-recipe" data-js="recipe" data-slug="{recipe.slug}" data-serves="{serves}" data-units="{units}">
     <div class="c-recipe__intro">
     <header class="c-recipe-header">
       <p class="c-recipe-header__chapter">{esc(recipe.chapter.title)}</p>
@@ -362,7 +383,7 @@ def cook_view(recipe: Recipe) -> str:
     slides = [f"""    <section class="c-cook-view__slide" data-js="cook-slide" data-label="Gather" aria-labelledby="cook-h-0">
       <p class="c-cook-view__kicker">Before you start</p>
       <h2 class="c-cook-view__heading" id="cook-h-0" tabindex="-1">Gather your ingredients</h2>
-      <div class="c-cook-view__body">{stepper(recipe)}{ingredients_block(recipe, "c")}</div>
+      <div class="c-cook-view__body"><div class="l-cluster">{stepper(recipe)}{units_switch(recipe_units(recipe))}</div>{ingredients_block(recipe, "c")}</div>
     </section>"""]
     for s, step in enumerate(recipe.steps, start=1):
         segs.append(f'<button type="button" class="c-cook-view__seg" data-js="cook-seg" '

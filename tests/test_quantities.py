@@ -93,6 +93,29 @@ class HtmlTest(unittest.TestCase):
         self.assertNotIn("<b>", html)
         self.assertIn("&lt;script&gt;", html)
 
+    def test_convertible_units_are_tagged(self):
+        self.assertIn('data-unit="cup"', q.render_line(typography("2 cups orzo"), scale_leading=True))
+        self.assertIn('data-unit="g"', q.render_line(typography("300 g onion"), scale_leading=True))
+        self.assertIn('data-unit="oz"', q.render_line(typography("17.6 oz gnocchi"), scale_leading=True))
+        # spoons stay as written, and so do units behind adjectives
+        self.assertNotIn("data-unit", q.render_line(typography("1 tablespoon butter"), scale_leading=True))
+        self.assertNotIn("data-unit", q.render_line(typography("2 heaping cups chicken"), scale_leading=True))
+
+    def test_source_conversion_is_marked_as_alternate(self):
+        html = q.render_line(typography("1/3 cup ({80} mL) avocado oil"), scale_leading=True)
+        self.assertIn('<span class="c-qty-alt" data-qty-alt> (', html)
+        self.assertIn('data-unit="ml"', html)
+        self.assertRegex(html, r"\)</span> avocado oil$")
+        # a count noun up front has nothing to stand in for, so its braced weight converts by itself
+        html = q.render_line(typography("2 bunches ({12-14} ounces) kale"), scale_leading=True)
+        self.assertNotIn("data-qty-alt", html)
+        self.assertIn('data-unit="oz"', html)
+
+    def test_unit_system(self):
+        self.assertEqual(q.unit_system([typography("300 g onion"), typography("1 tbsp oil")]), "metric")
+        self.assertEqual(q.unit_system([typography("1 cup stock"), typography("200 g carrot")]), "us")
+        self.assertIsNone(q.unit_system([typography("2 eggs"), typography("1 tsp salt")]))
+
     def test_unscaled_step_amounts(self):
         self.assertTrue(q.has_unscaled_amounts("Toss with 1 tablespoon of the oil."))
         self.assertFalse(q.has_unscaled_amounts("Toss with {1} tablespoon of the oil."))

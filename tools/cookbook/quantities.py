@@ -302,8 +302,56 @@ def text_html(text: str) -> str:
     return "".join(out)
 
 
+# --- US / metric --------------------------------------------------------------------------------------------
+# Units the US/metric switch converts; cookbook.js does the maths. Spoons stay as written:
+# teaspoons and tablespoons are used the world over, and "75 mL butter" helps nobody.
+CONVERTIBLE = {
+    "cup": "cup", "cups": "cup", "ounce": "oz", "ounces": "oz", "oz": "oz", "oz.": "oz",
+    "pound": "lb", "pounds": "lb", "lb": "lb", "lb.": "lb", "lbs": "lb", "lbs.": "lb",
+    "pint": "pint", "pints": "pint", "pt": "pint", "pt.": "pint",
+    "quart": "quart", "quarts": "quart", "qt": "quart", "qt.": "quart",
+    "gallon": "gallon", "gallons": "gallon",
+    "g": "g", "kg": "kg", "ml": "ml", "mL": "ml", "l": "l", "L": "l",
+    "liter": "l", "liters": "l", "litre": "l", "litres": "l",
+}
+US_UNITS = {"cup", "oz", "lb", "pint", "quart", "gallon"}
+
+
+def unit_key(phrase: Phrase | None) -> str | None:
+    """The convertible unit right after an amount ("2 cups" → "cup"). None when adjectives or a
+    parenthetical sit in between ("2 heaped cups" stays as written) or the word isn't a unit."""
+    if not phrase or not phrase.word or phrase.mid.strip():
+        return None
+    return CONVERTIBLE.get(phrase.word) or CONVERTIBLE.get(phrase.word.lower())
+
+
+def system_of(key: str) -> str:
+    return "us" if key in US_UNITS else "metric"
+
+
+def unit_system(lines: list[str]) -> str | None:
+    """The recipe's own measuring system, judged from its ingredients' leading amounts:
+    "us", "metric", or None when nothing converts (so the switch isn't shown)."""
+    counts = {"us": 0, "metric": 0}
+    for line in lines:
+        found = leading(line)
+        key = unit_key(found[1]) if found else None
+        if key:
+            counts[system_of(key)] += 1
+        for m in BRACE_RE.finditer(line):
+            key = unit_key(unit_phrase(line[m.end():]))
+            if key:
+                counts[system_of(key)] += 1
+    if not any(counts.values()):
+        return None
+    return "metric" if counts["metric"] > counts["us"] else "us"
+
+
 def _qty_html(amount: Amount, phrase: Phrase | None) -> str:
     attrs = [f'data-q="{float(amount.lo)!r}"', f'data-fmt="{amount.kind}"']
+    key = unit_key(phrase)
+    if key:
+        attrs.append(f'data-unit="{key}"')
     if amount.hi is not None:
         attrs.append(f'data-q-max="{float(amount.hi)!r}"')
     if amount.places:
@@ -325,25 +373,40 @@ def render_line(text: str, *, scale_leading: bool) -> str:
     c-qty spans, braces are removed, everything else is escaped."""
     out: list[str] = []
     pos = 0
+    lead_key = None
     if scale_leading:
         found = leading(text)
         if found:
             amount, phrase, end = found
             out.append(_qty_html(amount, phrase))
+            lead_key = unit_key(phrase)
             pos = end
     for m in BRACE_RE.finditer(text, pos):
-        out.append(text_html(text[pos:m.start()]))
+        before = text[pos:m.start()]
         amount = parse_braced(m.group(1))
         after = text[m.end():]
         phrase = unit_phrase(after)
         if amount is None:  # the validator reports it; render the text as written
-            out.append(text_html(m.group(1)))
+            out.append(text_html(before) + text_html(m.group(1)))
             pos = m.end()
             continue
         if phrase and phrase.word in METRIC and amount.kind == "int":
             amount.kind = "metric"
+        end = m.end() + (len(phrase.mid) + len(phrase.word) if phrase else 0)
+        key = unit_key(phrase)
+        # "1/3 cup ({80} mL)": the source's own conversion of the leading amount. It hides when the
+        # switch converts the leading amount into that same system, so it never reads "80 mL (80 mL)".
+        opener = re.search(r"\s*\($", before)
+        if (lead_key and key and system_of(key) != system_of(lead_key) and opener
+                and text[end:end + 1] == ")"):
+            out.append(text_html(before[:opener.start()]))
+            out.append(f'<span class="c-qty-alt" data-qty-alt>{esc(opener.group(0))}'
+                       f'{_qty_html(amount, phrase)})</span>')
+            pos = end + 1
+            continue
+        out.append(text_html(before))
         out.append(_qty_html(amount, phrase))
-        pos = m.end() + (len(phrase.mid) + len(phrase.word) if phrase else 0)
+        pos = end
     out.append(text_html(text[pos:]))
     return "".join(out)
 

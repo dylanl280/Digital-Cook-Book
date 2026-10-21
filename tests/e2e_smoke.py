@@ -209,6 +209,31 @@ def run(browser, base: str, recipes) -> None:
     check("dismissed timer leaves the tray", timer_page.is_hidden('[data-js="timer-tray"]'))
     timer_page.close()
 
+    # --- US / metric (US by default; the choice is remembered across recipes) ---------------------------------
+    units_page = ctx.new_page()
+    units_page.goto(base + "recipes/japanese-curry.html", wait_until="networkidle")
+    line = lambda pg, text: pg.locator(f'.c-recipe .c-ingredients .c-check__label:has-text("{text}")').first.inner_text().replace(" ", " ")  # noqa: E731
+    pressed = lambda pg: pg.get_attribute('.c-recipe-tools [data-js="units-btn"][aria-pressed="true"]', "data-units")  # noqa: E731
+    check("units default to US", pressed(units_page) == "us", str(pressed(units_page)))
+    check("metric recipe converts to US", line(units_page, "onion").startswith("11 oz onion"), line(units_page, "onion"))
+    check("US volumes read in cups", line(units_page, "other liquid").startswith("2 7⁄8–3 3⁄4 cups water"),
+          line(units_page, "other liquid"))
+    units_page.click('.c-recipe-tools [data-js="units-btn"][data-units="metric"]')
+    check("Metric shows the grams as written", line(units_page, "onion").startswith("300 g onion"), line(units_page, "onion"))
+    units_page.goto(base + "recipes/marry-me-chicken.html", wait_until="networkidle")
+    check("the Metric choice carries to other recipes", pressed(units_page) == "metric", str(pressed(units_page)))
+    check("cups become mL", line(units_page, "chicken stock").startswith("240 mL chicken stock"), line(units_page, "chicken stock"))
+    check("spoons stay as written", line(units_page, "teaspoon salt").startswith("1⁄2 teaspoon salt"), line(units_page, "teaspoon salt"))
+    units_page.goto(base + "recipes/kale-caesar-salad.html", wait_until="networkidle")
+    oil = line(units_page, "avocado")
+    check("a source's own conversion isn't repeated", oil.startswith("80 mL avocado") and "(80" not in oil, oil)
+    units_page.click('.c-recipe-tools [data-js="stepper-inc"]')
+    check("scaling and converting combine", line(units_page, "avocado").startswith("120 mL avocado"), line(units_page, "avocado"))
+    units_page.click('.c-recipe-tools [data-js="units-btn"][data-units="us"]')
+    oil = line(units_page, "avocado")
+    check("back to US restores the source's wording", oil.startswith("1⁄2 cup (120 mL) avocado"), oil)
+    units_page.close()
+
     # --- batch recipes: "Makes 1 pizza (2× batch)" ---------------------------------------------------------
     batch_page = ctx.new_page()
     batch_page.goto(base + "recipes/hot-honey-burrata-pizza.html", wait_until="networkidle")
