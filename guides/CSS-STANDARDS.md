@@ -40,6 +40,12 @@ All raw values live in `02-tokens.css`. Everything else uses `var(--token)`.
 | Lines | `--frame` (2px ink: photos, buttons), `--rule` (1px ink), `--rule-soft` |
 | Motion | `--dur-1/2/3`, `--ease-out` |
 
+**Dark theme.** `02-tokens.css` redefines the colour tokens, keeping the same names: warm charcoal
+paper with the template's greige as the ink. They follow the device's `prefers-color-scheme`, unless
+the reader flips the header's "Dark mode" toggle, which sets `data-theme` on `<html>` and is
+remembered. Components must never add dark-only rules or colours. If something looks wrong in the
+dark theme, fix the token.
+
 Each font has one job. League Spartan: chapter lines, the wordmark, small caps labels. Fraunces:
 recipe titles (uppercase), section and step headings, ghost numerals, sign-offs. Red Hat Text:
 everything else.

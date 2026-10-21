@@ -779,7 +779,34 @@
     });
   });
 
+  /* ---------- dark mode: follows the device unless the reader picks a theme (remembered) ---------- */
+  function initTheme() {
+    var root = doc.documentElement;
+    var media = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+    function effective() { return root.getAttribute("data-theme") || (media && media.matches ? "dark" : "light"); }
+    function sync() {
+      var dark = effective() === "dark";
+      jsAll("theme-toggle").forEach(function (b) {
+        b.hidden = false;
+        b.setAttribute("aria-pressed", String(dark));
+      });
+      var paper = getComputedStyle(root).getPropertyValue("--paper").trim();
+      $$('meta[name="theme-color"]').forEach(function (m) { if (paper) m.setAttribute("content", paper); });
+    }
+    jsAll("theme-toggle").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var next = effective() === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        store.set("dcb:theme", next);
+        sync();
+      });
+    });
+    if (media && media.addEventListener) media.addEventListener("change", sync);
+    sync();
+  }
+
   window.Cookbook = { formatAmount: formatAmount, amountValue: amountValue };
+  safe(initTheme);
   safe(initTimers);
   var article = js("recipe");
   if (article) safe(function () { initRecipe(article); });
