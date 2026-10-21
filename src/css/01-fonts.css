@@ -1,0 +1,55 @@
+/* Self-hosted OFL fonts (tools/fetch_fonts.py) standing in for the template's commercial faces.
+   @font-face cannot live inside a layer, so this file is the one unlayered exception. */
+
+@font-face {
+  font-family: "League Spartan";
+  src: url("fonts/league-spartan.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/fraunces.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Red Hat Text";
+  src: url("fonts/red-hat-text.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Metric-matched local fallbacks keep the layout steady while the web fonts load. */
+@font-face {
+  font-family: "Red Hat Text Fallback";
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 100.4%;
+  ascent-override: 101.3%;
+  descent-override: 30.4%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia");
+  size-adjust: 105%;
+  ascent-override: 93.1%;
+  descent-override: 24.3%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "League Spartan Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 700;
+  size-adjust: 92.2%;
+  ascent-override: 75.9%;
+  descent-override: 23.9%;
+  line-gap-override: 0%;
+}

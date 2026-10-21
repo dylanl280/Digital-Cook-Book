@@ -1,0 +1,19 @@
+# Build output (GitHub Actions builds and deploys it)
+_site/
+
+# Raw source material: downloads, source JSON, PDFs, screenshots
+inbox/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Test artifacts
+test-results/
+
+# Editor / OS
+.vscode/
+desktop.ini
+Thumbs.db
+.DS_Store

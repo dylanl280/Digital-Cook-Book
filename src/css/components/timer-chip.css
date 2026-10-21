@@ -1,0 +1,42 @@
+/* "⏱ 20–25 min" button after a step action; starts a timer in the tray. */
+@layer components {
+  .c-timer-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    min-block-size: 1.75rem;
+    margin-inline-start: 0.4em;
+    padding: 0.1em 0.6em;
+    border: var(--rule);
+    background: var(--timer-chip-bg, transparent);
+    color: var(--timer-chip-fg, var(--ink));
+    font: var(--weight-strong) var(--text-xs) / 1.2 var(--font-text);
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    vertical-align: 0.08em;
+  }
+
+  @media (pointer: coarse) {
+    .c-timer-chip {
+      min-block-size: var(--tap);
+      vertical-align: middle;
+    }
+  }
+
+  .c-timer-chip__icon {
+    flex: none;
+    inline-size: 1.05em;
+    block-size: 1.05em;
+  }
+
+  @media (hover: hover) {
+    .c-timer-chip:hover {
+      --timer-chip-bg: var(--paper-2);
+    }
+  }
+
+  .c-timer-chip[data-state="running"] {
+    --timer-chip-bg: var(--ink);
+    --timer-chip-fg: var(--paper);
+  }
+}

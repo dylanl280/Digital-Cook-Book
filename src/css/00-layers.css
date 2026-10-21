@@ -1,0 +1,2 @@
+/* Cascade layer order for the whole site. Later layers win; see guides/CSS-STANDARDS.md. */
+@layer reset, tokens, base, layout, components, utilities;

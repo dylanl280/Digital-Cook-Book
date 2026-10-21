@@ -1,0 +1,67 @@
+/* Living style guide page (styleguide.html): swatches, type samples, spacing bars. */
+@layer components {
+  .c-styleguide {
+    display: grid;
+    gap: var(--section-gap);
+    padding-block: var(--section-gap);
+  }
+
+  .c-styleguide__section {
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .c-styleguide__intro {
+    max-inline-size: 60ch;
+  }
+
+  .c-styleguide__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+    gap: var(--space-l) var(--space-m);
+  }
+
+  .c-styleguide__row {
+    display: grid;
+    gap: var(--space-2xs) var(--space-m);
+    padding-block: var(--space-s);
+    border-block-end: var(--rule-soft);
+  }
+
+  .c-styleguide__label {
+    font: 700 var(--text-xs) / 1.3 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .c-styleguide__sample {
+    padding: var(--space-m);
+    border: var(--rule-soft);
+  }
+
+  .c-styleguide__bar {
+    inline-size: var(--bar);
+    block-size: 0.75rem;
+    background: var(--ink);
+  }
+
+  .c-swatch {
+    display: grid;
+    gap: var(--space-2xs);
+    font-size: var(--text-sm);
+  }
+
+  .c-swatch__chip {
+    block-size: 4.5rem;
+    border: var(--rule);
+    background: var(--swatch);
+  }
+
+  @media (width >= 48rem) {
+    .c-styleguide__row {
+      grid-template-columns: 14rem minmax(0, 1fr);
+      align-items: baseline;
+    }
+  }
+}

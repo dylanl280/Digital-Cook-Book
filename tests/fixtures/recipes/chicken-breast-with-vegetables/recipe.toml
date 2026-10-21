@@ -1,0 +1,80 @@
+# The Canva template's sample recipe. Used by the tests and the style guide; never published.
+schema = 1
+title = "Chicken Breast with Vegetables"
+chapter = "chicken"
+status = "draft"
+added = 2026-10-19
+tags = ["sheet-pan", "weeknight"]
+description = """
+Tender, juicy chicken breasts are paired with a vibrant medley of roasted bell peppers, zucchini, \
+and onions, all seasoned to perfection. Easy to prepare and full of flavor, it's a healthy choice \
+that doesn't compromise on taste. Ideal for a quick dinner that feels like a gourmet treat!"""
+serves = 2
+prep_minutes = 15
+cook_minutes = [25, 30]
+signoff = "Enjoy your healthy and delicious meal!"
+
+[photo]
+pending = "Template sample — no photo"
+
+[source]
+kind = "template"
+name = "Canva recipe template (sample content)"
+
+[[ingredients]]
+items = [
+  "2 boneless, skinless chicken breasts",
+  "1 red bell pepper, sliced",
+  "1 yellow bell pepper, sliced",
+  "1 zucchini, sliced",
+  "1 red onion, sliced",
+  "2 tablespoons olive oil",
+  "2 garlic cloves, minced",
+  "1 teaspoon dried oregano",
+  "1 teaspoon dried basil",
+  "Salt and pepper to taste",
+  "Fresh lemon juice (optional)",
+  "Fresh parsley, chopped (for garnish)",
+]
+
+[[steps]]
+title = "Prepare the Chicken"
+actions = [
+  "Preheat your oven to 400°F (200°C).",
+  "Season the chicken breasts with salt, pepper, oregano, and basil on both sides.",
+]
+
+[[steps]]
+title = "Cook the Vegetables"
+actions = [
+  "In a large bowl, toss the sliced bell peppers, zucchini, and onion with {1} tablespoon of olive oil, minced garlic, salt, and pepper.",
+  "Spread the vegetables evenly on a baking sheet lined with parchment paper.",
+]
+
+[[steps]]
+title = "Sear the Chicken"
+actions = [
+  "Heat the remaining {1} tablespoon of olive oil in a large skillet over medium-high heat.",
+  "Sear the chicken breasts for 2-3 minutes on each side, until golden brown.",
+]
+
+[[steps]]
+title = "Bake"
+actions = [
+  "Place the seared chicken breasts on top of the vegetables on the baking sheet.",
+  "Bake in the preheated oven for 20-25 minutes, or until the chicken is cooked through and the vegetables are tender.",
+]
+
+[[steps]]
+title = "Finish"
+actions = [
+  "Remove from the oven and let the chicken rest for a few minutes.",
+  "Squeeze fresh lemon juice over the chicken and vegetables if desired.",
+  "Garnish with chopped parsley.",
+]
+
+[[steps]]
+title = "Serve"
+actions = [
+  "Slice the chicken breasts and serve alongside the roasted vegetables.",
+]

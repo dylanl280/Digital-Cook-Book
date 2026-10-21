@@ -1,0 +1,71 @@
+schema = 1
+title = "Hot Honey Burrata Pizza"
+chapter = "beef"
+status = "published"
+added = 2026-10-19
+tags = ["pizza", "quick", "spicy"]
+description = """
+A plain pizza crust gets a thin layer of sauce, sliced cherry tomatoes and coins of Italian beef \
+stick, then soft chunks of burrata go on for the last few minutes of baking. Red pepper flakes and \
+a drizzle of hot honey finish it with a sweet, spicy kick."""
+makes = "1 pizza"
+signoff = "Enjoy every sweet, spicy and creamy bite!"
+
+[photo]
+file = "hero"
+alt = "Thin-crust pizza cut into slices, topped with roasted cherry tomatoes, coins of meat stick, melting burrata, red pepper flakes and hot honey"
+focal = "50% 48%"
+credit = "Chomps"
+credit_url = "https://chomps.com/blogs/recipes/hot-honey-burrata-pizza"
+
+[source]
+kind = "website"
+name = "Chomps"
+author = "The Chomps Crew"
+url = "https://chomps.com/blogs/recipes/hot-honey-burrata-pizza"
+accessed = 2026-10-19
+
+[[ingredients]]
+items = [
+  "1 pizza crust (Cappello's Naked Pizza Crust was used, but any plain crust works)",
+  "2 tablespoons pizza sauce (Rao's was used, but any jarred or homemade sauce works)",
+  "1/2 cup cherry tomatoes, sliced",
+  "1 Chomps Italian Beef Stick, sliced",
+  "1/2 ball of fresh burrata",
+  "Red pepper flakes",
+  "Hot honey",
+]
+
+[[steps]]
+title = "Heat the Oven"
+actions = [
+  "Preheat the oven according to your pizza crust's instructions.",
+]
+
+[[steps]]
+title = "Top the Crust"
+actions = [
+  "Spread the {2} tablespoons of pizza sauce evenly over the crust.",
+  "Scatter the sliced cherry tomatoes and beef stick over the top, covering the crust evenly.",
+]
+
+[[steps]]
+title = "Bake"
+actions = [
+  "Bake the pizza for as long as the crust's instructions say.",
+  "While it bakes, tear {1/2} ball of burrata into small chunks.",
+]
+
+[[steps]]
+title = "Add the Burrata"
+actions = [
+  "A few minutes before the pizza is done, dot the burrata chunks over the top.",
+  "Let it bake for another 2–3 minutes.",
+]
+
+[[steps]]
+title = "Finish"
+actions = [
+  "Out of the oven, scatter red pepper flakes over the top and finish with a generous drizzle of hot honey.",
+  "Slice and serve.",
+]

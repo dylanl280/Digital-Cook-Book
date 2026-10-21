@@ -1,0 +1,38 @@
+/* Compact header on recipe pages: wordmark home link + back link. */
+@layer components {
+  .c-site-header {
+    border-block-end: var(--rule);
+  }
+
+  .c-site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-m);
+    min-block-size: 3.5rem;
+  }
+
+  .c-site-header__brand {
+    font: 700 var(--text-xs) / 1 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .c-site-header__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    min-block-size: var(--tap);
+    font-size: var(--text-sm);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .c-site-header__brand:hover,
+    .c-site-header__back:hover {
+      text-decoration: underline;
+    }
+  }
+}

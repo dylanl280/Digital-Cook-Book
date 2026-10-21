@@ -1,0 +1,25 @@
+/* Layout primitives. Components never set their own outer margins; these provide the spacing. */
+@layer layout {
+  .l-container {
+    inline-size: min(100% - 2 * var(--gutter), var(--wide));
+    margin-inline: auto;
+  }
+
+  .l-sheet {
+    inline-size: min(100% - 2 * var(--gutter), var(--sheet));
+    margin-inline: auto;
+  }
+
+  .l-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stack-gap, var(--space-m));
+  }
+
+  .l-cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--cluster-gap, var(--space-s));
+  }
+}

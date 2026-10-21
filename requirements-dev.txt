@@ -1,0 +1,4 @@
+# Developer tools only. The site build itself needs nothing beyond Python 3.11+.
+pypdf==6.21.1       # tools/pdf_extract.py: read recipe PDFs
+pillow==13.0.0      # tools/photo.py: resize and convert photos
+playwright==1.64.0  # tests/e2e_smoke.py: browser checks driving the installed Chrome

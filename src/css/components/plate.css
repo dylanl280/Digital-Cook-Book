@@ -1,0 +1,26 @@
+/* Placeholder for recipes without a photo yet: a framed greige "plate" with a giant white
+   initial (echoing the ghost numerals) and a quiet "Photo to come" label. */
+@layer components {
+  .c-plate {
+    container-type: inline-size;
+  }
+
+  .c-plate__initial {
+    position: absolute;
+    inset-block-end: -0.24em;
+    inset-inline-start: -0.04em;
+    font: 400 var(--text-plate) / 1 var(--font-display);
+    color: var(--ghost);
+    user-select: none;
+  }
+
+  .c-plate__label {
+    position: absolute;
+    inset-block-start: var(--space-xs);
+    inset-inline-start: var(--space-xs);
+    font: 700 var(--text-xs) / 1 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+}

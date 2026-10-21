@@ -1,0 +1,105 @@
+schema = 1
+title = "White Chicken Corn Chili"
+chapter = "chicken"
+status = "published"
+added = 2026-10-19
+tags = ["comfort-food", "creamy", "one-pot", "soup", "weeknight"]
+description = """
+Shredded chicken, great northern beans, sweet corn and mild green chilies in a creamy, \
+cumin-spiced broth. Blending a ladleful of the beans gives the chili its body, and sour cream \
+stirred in at the end makes it silky. It all comes together in one pot in about 45 minutes, \
+ready for a pile of toppings."""
+serves = 5
+prep_minutes = 10
+cook_minutes = 25
+total_minutes = 45
+signoff = "Ladle it up, pile on your favorite toppings and enjoy every cozy spoonful!"
+notes = [
+  "No cooked chicken? Add 1 1/2 lbs raw chicken with the broth in step 2, then lift it out, shred it and stir it back in before serving.",
+  "For a milder pot, use 1 can of green chilies instead of 2 and leave out the cayenne.",
+]
+
+[photo]
+file = "hero"
+alt = "Creamy white chicken chili with corn and white beans in a gray bowl, topped with avocado, cheese, tortilla strips and cilantro"
+focal = "55% 50%"
+credit = "Tastes Better From Scratch"
+credit_url = "https://tastesbetterfromscratch.com/creamy-white-chicken-chili/"
+
+[source]
+kind = "website"
+name = "Tastes Better From Scratch"
+author = "Lauren Allen"
+url = "https://tastesbetterfromscratch.com/creamy-white-chicken-chili/"
+accessed = 2026-10-19
+
+[[ingredients]]
+group = "For the chili"
+items = [
+  "1 tablespoon olive oil",
+  "1 small yellow onion, chopped (about {1/2} cup)",
+  "2 garlic cloves, finely minced (or {1 1/2} teaspoons garlic powder)",
+  "2 1/2 cups low-sodium chicken broth",
+  "2 (4 oz) cans diced green chilies",
+  "1 1/2 teaspoons ground cumin",
+  "1/4 teaspoon cayenne pepper",
+  "1/2 teaspoon dried oregano",
+  "1/2 teaspoon paprika",
+  "1/2 small lime, juiced",
+  "Salt and freshly ground black pepper, to taste",
+  "2 (15 oz) cans great northern beans",
+  "1 cup sour cream (or plain Greek yogurt)",
+  "1 cup corn (frozen or fresh)",
+  "2 heaping cups cooked chicken, shredded (rotisserie or leftover chicken)",
+]
+
+[[ingredients]]
+group = "To serve"
+items = [
+  "Fresh cilantro",
+  "Shredded cheese",
+  "Tortilla chips",
+  "Green onions",
+  "Avocado, sliced",
+]
+
+[[steps]]
+title = "Soften the Onion"
+actions = [
+  "Warm the oil in a big (5- to 6-quart) pot set over medium-high heat.",
+  "Add the onion and sauté for 3–5 minutes, until softened.",
+  "Stir in the garlic and cook for 30 seconds.",
+]
+
+[[steps]]
+title = "Season the Broth"
+actions = [
+  "Pour in the chicken broth, then add the green chilies, cumin, cayenne, paprika, oregano and lime juice.",
+  "Season to taste with salt and pepper.",
+]
+
+[[steps]]
+title = "Prep the Beans"
+actions = [
+  "Drain the beans in a strainer and rinse them.",
+  "For a thicker, creamier chili (optional), blend a big ladleful of the beans with a splash of broth from the pot in a food processor until smooth.",
+]
+
+[[steps]]
+title = "Simmer"
+actions = [
+  "Add all the beans, blended and whole, and the corn to the pot.",
+  "Let it bubble gently, lid off, for 15 to 30 minutes.",
+]
+
+[[steps]]
+title = "Make It Creamy"
+actions = [
+  "Take the pot off the heat and stir in the sour cream and shredded chicken.",
+]
+
+[[steps]]
+title = "Serve"
+actions = [
+  "Ladle into bowls and top with cilantro, shredded cheese, green onions, avocado slices and tortilla chips, as you like.",
+]

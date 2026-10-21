@@ -1,0 +1,22 @@
+/* The template's page-2 photo pair: two framed photos, 3fr : 4fr, sharing one row height. */
+@layer components {
+  .c-gallery {
+    display: grid;
+    grid-template-columns: 3fr 4fr;
+    gap: var(--space-m);
+    aspect-ratio: 7 / 5;
+  }
+
+  .c-gallery--single {
+    grid-template-columns: 1fr;
+    aspect-ratio: auto;
+  }
+
+  .c-gallery__item {
+    block-size: 100%;
+  }
+
+  .c-gallery--single .c-gallery__item {
+    --ratio: var(--ratio-hero);
+  }
+}

@@ -1,0 +1,27 @@
+/* Home page photo grid: 2 / 3 / 4 columns. */
+@layer components {
+  .c-recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+    gap: var(--space-xl) var(--space-s);
+  }
+
+  @media (width < 22.5rem) {
+    .c-recipe-grid {
+      --cols: 1;
+    }
+  }
+
+  @media (width >= 48rem) {
+    .c-recipe-grid {
+      --cols: 3;
+      column-gap: var(--space-l);
+    }
+  }
+
+  @media (width >= 64rem) {
+    .c-recipe-grid {
+      --cols: 4;
+    }
+  }
+}

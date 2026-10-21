@@ -1,0 +1,93 @@
+schema = 1
+title = "Creamy Cajun Chicken Orzo"
+chapter = "chicken"
+status = "published"
+added = 2026-10-19
+tags = ["comfort-food", "creamy", "one-pan", "pasta"]
+description = """
+Cajun-spiced chicken breasts are seared until golden, then sliced over orzo that's toasted \
+with tomato paste and cooked in stock until creamy. Parmesan, cream, spinach and fresh lemon \
+finish the sauce, and everything happens in the same pan."""
+signoff = "Spoon it into bowls while it's hot and enjoy every creamy bite!"
+
+[photo]
+file = "hero"
+alt = "Creamy Cajun orzo topped with a seared, spiced chicken breast, shaved parmesan and parsley, in a dark bowl"
+focal = "50% 50%"
+credit = "the Instagram reel"
+credit_url = "https://www.instagram.com/reel/DYNa5BipywA/"
+
+[source]
+kind = "video"
+name = "Instagram reel"
+url = "https://www.instagram.com/reel/DYNa5BipywA/"
+accessed = 2026-10-19
+
+[[ingredients]]
+items = [
+  "3 chicken breasts",
+  "2 cups orzo",
+  "2 tablespoons olive oil",
+  "3 tablespoons butter",
+  "1 white onion, diced",
+  "1 yellow onion, diced",
+  "4 cloves garlic, minced",
+  "2 tablespoons tomato paste",
+  "3 cups chicken stock",
+  "1/2 cup heavy cream",
+  "1 cup freshly grated parmesan",
+  "1 cup spinach",
+  "1 lemon",
+  "Fresh parsley",
+  "Cajun seasoning (the creator uses PoggioliEats)",
+  "Salt",
+  "Black pepper",
+]
+
+[[steps]]
+title = "Season the Chicken"
+actions = [
+  "Coat the chicken breasts with a little of the olive oil, then give them a generous dusting of Cajun seasoning, salt and black pepper.",
+]
+
+[[steps]]
+title = "Sear the Chicken"
+actions = [
+  "Warm the remaining oil in a large pan set over medium-high heat.",
+  "Brown the breasts well on each side until golden and cooked all the way through.",
+  "Move them to a board to rest; slice them just before serving.",
+]
+
+[[steps]]
+title = "Soften the Onions"
+actions = [
+  "Drop the butter into the same pan along with both diced onions and the minced garlic.",
+  "Stir now and then until the onions turn soft and the garlic smells fragrant.",
+]
+
+[[steps]]
+title = "Toast the Orzo"
+actions = [
+  "Work the tomato paste into the onions and give it 1–2 minutes to cook down.",
+  "Tip in the orzo and keep it moving for another 1–2 minutes, so the grains toast and pick up the flavors in the pan.",
+]
+
+[[steps]]
+title = "Cook the Orzo"
+actions = [
+  "Add the stock a little at a time, stirring often, until the orzo is tender and the pan looks creamy.",
+]
+
+[[steps]]
+title = "Make It Creamy"
+actions = [
+  "Lower the heat and fold in the cream, parmesan, spinach and a good squeeze of lemon juice.",
+  "Keep stirring until the spinach has wilted and the sauce is smooth and glossy.",
+]
+
+[[steps]]
+title = "Serve"
+actions = [
+  "Divide the orzo among plates and lay the sliced chicken on top.",
+  "Finish with more parmesan, the parsley, a grind of black pepper and a last squeeze of lemon.",
+]

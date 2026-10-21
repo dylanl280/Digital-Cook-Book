@@ -1,0 +1,13 @@
+/* "Kitchen Notes:" — the cook's own tweaks. */
+@layer components {
+  .c-notes {
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .c-notes__list {
+    display: grid;
+    gap: var(--space-2xs);
+    padding-inline-start: 1.2em;
+  }
+}

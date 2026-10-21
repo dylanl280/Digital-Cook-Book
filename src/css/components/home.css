@@ -1,0 +1,7 @@
+/* Home page body: toolbar (when shown), photo grid, empty state. */
+@layer components {
+  .c-home {
+    --stack-gap: var(--space-xl);
+    padding-block-start: var(--space-xl);
+  }
+}

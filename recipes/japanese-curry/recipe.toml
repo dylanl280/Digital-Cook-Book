@@ -1,0 +1,108 @@
+schema = 1
+title = "Japanese Curry"
+chapter = "beef"
+status = "published"
+added = 2026-10-19
+tags = ["comfort-food", "one-pot"]
+description = """
+Tender beef, potatoes and carrots in a thick, glossy sauce built on store-bought Japanese curry \
+roux, served with short-grain rice. Slowly caramelized onions give it a deep, mellow sweetness \
+(skip them if you're short on time), and a secret ingredient or two, such as red wine, coffee or \
+dark chocolate, makes the pot your own."""
+serves = 6
+prep_minutes = 10
+cook_minutes = 80
+total_minutes = 90
+signoff = "Grab a spoon and enjoy every rich, cozy bite!"
+
+[photo]
+file = "hero"
+alt = "Glossy brown Japanese curry with chunks of meat, potatoes and carrots beside a mound of white rice in a pale ceramic bowl"
+focal = "45% 45%"
+credit = "Sudachi"
+credit_url = "https://sudachirecipes.com/japanese-curry-roux-cubes/"
+
+[source]
+kind = "website"
+name = "Sudachi"
+author = "Yuto Omura"
+url = "https://sudachirecipes.com/japanese-curry-roux-cubes/"
+accessed = 2026-10-19
+
+[[ingredients]]
+group = "For the onions"
+items = [
+  "300 g onion, thinly sliced",
+  "1 tablespoon olive oil",
+  "1 pinch salt",
+  "1 tablespoon water",
+]
+
+[[ingredients]]
+group = "For the curry"
+items = [
+  "300 g beef (or protein of your choice), diced",
+  "1 tablespoon butter",
+  "2 cloves garlic, grated or crushed",
+  "150 g carrot",
+  "200 g potato",
+  "1/2 box Japanese curry roux (a 1/2 box is about 100 g)",
+  "700–900 ml water or other liquid (an average; check your roux box for the exact amount)",
+  "6 portions cooked Japanese short-grain rice (about {960} g, from {3} rice cups or {450} g uncooked)",
+  "Secret ingredients of your choice (red wine, coffee, dark chocolate, soy sauce; all optional)",
+]
+
+[[steps]]
+title = "Caramelize Onions (Optional)"
+actions = [
+  "It takes a while, but it makes a deeper, sweeter curry. To skip it, set the sliced onion aside to soften in the pot later.",
+  "Heat a pan over medium heat, add the olive oil and the onion (the thinner the slices, the faster they cook) and fry for 10 minutes, stirring now and then so it doesn't burn.",
+  "Mix in the pinch of salt, turn the heat to low and keep cooking for 20–30 minutes, stirring every few minutes.",
+  "If the onion starts to stick, loosen it with {1–2} teaspoons of the water at a time. Prep the other ingredients while it cooks.",
+]
+
+[[steps]]
+title = "Prep the Ingredients"
+actions = [
+  "Peel the potato and carrot and cut them into large chunks, a little bigger than bite-size; smaller pieces fall apart as the curry simmers.",
+  "Cut the beef into bite-size pieces.",
+]
+
+[[steps]]
+title = "Brown the Beef"
+actions = [
+  "Melt the butter in a large pot over medium heat. If you skipped caramelizing, fry the onion in the butter until softened.",
+  "Add the garlic and fry until fragrant.",
+  "Add the beef, sprinkle with a pinch of salt and sear until browned all over.",
+]
+
+[[steps]]
+title = "Add the Vegetables"
+actions = [
+  "Add the carrot and potato, stir and cook together for 1–2 minutes.",
+  "If you caramelized the onion, add it now and stir well to break it up.",
+]
+
+[[steps]]
+title = "Simmer"
+actions = [
+  "Pour in {700–900} ml of water (the amount depends on your roux) and bring it to a boil.",
+  "Using red wine? Swap 10% of the water for wine, so {850} ml water becomes {765} ml water plus {85} ml wine. Tomato purée or similar can go in now too.",
+  "Once it boils, turn the heat to medium-low and simmer for 20 minutes with the lid slightly ajar, skimming off any foam now and then.",
+  "If you're adding soy sauce, stir it in while the curry simmers.",
+]
+
+[[steps]]
+title = "Add the Roux"
+actions = [
+  "Turn the heat to low, add the curry roux and stir until it dissolves.",
+  "Simmer uncovered for 5–10 minutes, until it's as thick as you like.",
+  "Too thick? Add more water, {50–100} ml at a time. Too thin? Keep simmering, checking every 5 minutes.",
+  "Stir in any chocolate or coffee powder now, if using, then take the pot off the heat.",
+]
+
+[[steps]]
+title = "Serve"
+actions = [
+  "Serve with the rice and your favorite toppings.",
+]

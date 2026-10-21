@@ -1,0 +1,37 @@
+/* Hero row: framed photo and the description/meta column in the template's golden split. */
+@layer components {
+  .c-recipe-hero {
+    container-type: inline-size;
+  }
+
+  .c-recipe-hero__grid {
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .c-recipe-hero__media {
+    --ratio: var(--ratio-hero);
+  }
+
+  .c-recipe-hero__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-m);
+  }
+
+  .c-recipe-hero__description {
+    hyphens: auto;
+  }
+
+  @container (inline-size >= 44rem) {
+    .c-recipe-hero__grid {
+      grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr);
+      gap: var(--space-l);
+    }
+
+    .c-recipe-hero__description {
+      text-align: justify;
+    }
+  }
+}

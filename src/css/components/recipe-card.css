@@ -1,0 +1,63 @@
+/* A recipe on the home grid. The title link stretches over the whole card, so the photo and the
+   name both open the recipe with a single tab stop. */
+@layer components {
+  .c-recipe-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+  }
+
+  .c-recipe-card__media {
+    --ratio: var(--ratio-card);
+    margin-block-end: var(--space-xs);
+  }
+
+  .c-recipe-card__kicker {
+    font: 700 var(--text-xs) / 1.2 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .c-recipe-card__title {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    font: 400 var(--text-card) / var(--leading-heading) var(--font-display);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+  }
+
+  .c-recipe-card__link {
+    text-decoration-line: var(--card-underline, none);
+  }
+
+  .c-recipe-card__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .c-recipe-card__link:focus-visible {
+    outline: none;
+  }
+
+  .c-recipe-card:has(:focus-visible) {
+    outline: var(--frame);
+    outline-offset: 6px;
+  }
+
+  .c-recipe-card__meta {
+    font-size: var(--text-sm);
+    color: var(--ink-3);
+  }
+
+  @media (hover: hover) {
+    .c-recipe-card:hover {
+      --zoom: 1.035;
+      --card-underline: underline;
+    }
+  }
+}

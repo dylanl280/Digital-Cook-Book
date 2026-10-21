@@ -1,0 +1,11 @@
+/* "Ingredients:" / "Instructions:" headings. The colon is decoration, hidden from screen readers. */
+@layer components {
+  .c-section-title {
+    font: 400 var(--text-h2) / var(--leading-heading) var(--font-display);
+  }
+
+  .c-section-title::after {
+    content: ":";
+    content: ":" / "";
+  }
+}

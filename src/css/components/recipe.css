@@ -1,0 +1,23 @@
+/* Recipe page skeleton: vertical rhythm between the template's blocks. */
+@layer components {
+  .c-recipe {
+    display: grid;
+    gap: var(--section-gap);
+    padding-block-start: var(--section-gap);
+  }
+
+  .c-recipe__intro {
+    display: grid;
+    gap: var(--space-l);
+  }
+
+  .c-recipe__section {
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .c-recipe__note {
+    font-size: var(--text-sm);
+    color: var(--ink-3);
+  }
+}

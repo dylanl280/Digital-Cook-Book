@@ -1,0 +1,19 @@
+/* "MEALS WITH CHICKEN" chapter line over the recipe name, as in the template. */
+@layer components {
+  .c-recipe-header {
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .c-recipe-header__chapter {
+    font: 700 var(--text-chapter) / var(--leading-tight) var(--font-label);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+  }
+
+  .c-recipe-header__title {
+    font: 400 var(--text-title) / var(--leading-heading) var(--font-display);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+  }
+}

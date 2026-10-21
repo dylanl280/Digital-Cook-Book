@@ -1,0 +1,22 @@
+/* Single-purpose helpers. The only layer (with the reduced-motion reset) allowed to use !important. */
+@layer utilities {
+  [hidden] {
+    display: none !important;
+  }
+
+  .u-visually-hidden {
+    position: absolute !important;
+    inline-size: 1px !important;
+    block-size: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  .u-nowrap {
+    white-space: nowrap;
+  }
+}

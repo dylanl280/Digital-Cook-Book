@@ -1,0 +1,106 @@
+/* Running timers, docked to the bottom of the screen (inverted ink panel). Cook mode raises it
+   above its navigation bar through --tray-offset; cookbook.js publishes the tray's height as
+   --tray-space so pages and cook mode can scroll their last lines clear of it. */
+@layer components {
+  .c-timer-tray {
+    position: fixed;
+    z-index: 10;
+    inset-inline: var(--space-s);
+    inset-block-end: calc(var(--tray-offset, 0rem) + var(--space-s) + env(safe-area-inset-bottom));
+    max-inline-size: 30rem;
+    margin-inline: auto;
+    padding: var(--space-2xs) var(--space-s);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .c-timer-tray--static {
+    position: static;
+    margin-inline: 0;
+  }
+
+  .c-timer-tray :focus-visible {
+    outline-color: var(--timer-focus, var(--paper));
+  }
+
+  .c-timer-tray__list {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .c-timer-tray__hint {
+    padding-block-start: var(--space-3xs);
+    font-size: var(--text-sm);
+  }
+
+  .c-timer {
+    --timer-line: var(--paper);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "label label"
+      "time actions";
+    align-items: center;
+    gap: var(--space-3xs) var(--space-xs);
+    padding-block: var(--space-3xs);
+  }
+
+  .c-timer[data-state="done"] {
+    --timer-line: var(--ink);
+    --timer-focus: var(--ink);
+    padding-inline: var(--space-2xs);
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .c-timer__label {
+    display: -webkit-box;
+    grid-area: label;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: var(--text-sm);
+  }
+
+  .c-timer__time {
+    grid-area: time;
+    font: var(--weight-strong) var(--text-base) / 1 var(--font-text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .c-timer__actions {
+    display: flex;
+    grid-area: actions;
+    gap: var(--space-2xs);
+  }
+
+  .c-timer__btn {
+    min-inline-size: 2.25rem;
+    min-block-size: 2.25rem;
+    padding-inline: var(--space-2xs);
+    border: 1px solid var(--timer-line);
+    background: transparent;
+    font: var(--weight-strong) var(--text-xs) / 1 var(--font-text);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  @media (pointer: coarse) {
+    .c-timer__btn {
+      min-inline-size: var(--tap);
+      min-block-size: var(--tap);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .c-timer[data-state="done"] {
+      animation: c-timer-blink 1.2s steps(2, jump-none) infinite;
+    }
+  }
+
+  @keyframes c-timer-blink {
+    50% {
+      opacity: 0.6;
+    }
+  }
+}

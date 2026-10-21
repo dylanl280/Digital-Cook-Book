@@ -1,0 +1,20 @@
+/* Site footer. */
+@layer components {
+  .c-site-footer {
+    border-block-start: var(--rule);
+  }
+
+  .c-site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-m);
+    padding-block: var(--space-m) var(--space-xl);
+    font-size: var(--text-sm);
+    color: var(--ink-3);
+  }
+
+  .c-site-footer__link {
+    color: var(--ink);
+  }
+}

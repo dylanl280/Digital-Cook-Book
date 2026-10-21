@@ -1,0 +1,14 @@
+/* "No recipes match" message for the home search. */
+@layer components {
+  .c-empty {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-s);
+    padding-block: var(--space-xl);
+    text-align: center;
+  }
+
+  .c-empty__text {
+    font: 400 var(--text-step) / var(--leading-heading) var(--font-display);
+  }
+}

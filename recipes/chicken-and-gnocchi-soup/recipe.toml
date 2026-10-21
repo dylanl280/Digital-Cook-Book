@@ -1,0 +1,100 @@
+schema = 1
+title = "Chicken and Gnocchi Soup"
+chapter = "chicken"
+status = "published"
+added = 2026-10-19
+tags = ["comfort-food", "creamy", "one-pot", "soup"]
+description = """
+An easy one-pot soup of tender gnocchi, seasoned chicken, carrots, celery and spinach in a \
+rich, creamy broth. The chicken cooks first, the soup builds in the same pot, and the gnocchi \
+need just a few minutes at the end."""
+signoff = "Ladle it into bowls and enjoy it while it's hot!"
+
+[photo]
+file = "hero"
+alt = "Creamy chicken and gnocchi soup with spinach and carrots in a sage-green bowl, topped with black pepper, parmesan and rosemary"
+focal = "58% 50%"
+credit = "supplied by the cookbook owner"
+
+[source]
+kind = "video"
+name = "@piecookwithme on Instagram"
+url = "https://www.instagram.com/reel/DdFI7irShpc/"
+accessed = 2026-10-19
+
+[[ingredients]]
+group = "For the chicken"
+items = [
+  "2 chicken breasts",
+  "Garlic powder",
+  "Paprika",
+  "Salt",
+  "Black pepper",
+  "Italian seasoning",
+]
+
+[[ingredients]]
+group = "For the soup"
+items = [
+  "1/2 cup onion",
+  "4–6 garlic cloves",
+  "4 tablespoons butter",
+  "2 cups carrots, diced",
+  "1 cup celery, diced",
+  "2 tablespoons flour",
+  "4 cups chicken broth",
+  "2 cups heavy cream",
+  "17.6 oz gnocchi",
+  "2 handfuls of spinach (about {2} cups)",
+  "Grated parmesan cheese",
+]
+
+[[ingredients]]
+group = "To season"
+items = [
+  "1 teaspoon garlic powder, or to taste",
+  "1 teaspoon Italian seasoning, or to taste",
+  "1/2 tablespoon chicken bouillon, or to taste",
+  "Plenty of black pepper",
+]
+
+[[steps]]
+title = "Cook the Chicken"
+actions = [
+  "Season the chicken breasts with garlic powder, paprika, salt, pepper and Italian seasoning.",
+  "Cook them in a large pot for 6–8 minutes on each side, or until the inside reaches 165°F (74°C).",
+  "Set the chicken aside to cool, then chop it into bite-sized pieces.",
+]
+
+[[steps]]
+title = "Start the Soup"
+actions = [
+  "Melt the butter in the same pot, then cook the onion and garlic until the garlic is fragrant.",
+]
+
+[[steps]]
+title = "Thicken the Base"
+actions = [
+  "Add the celery and carrots and cook for 1 minute more.",
+  "Sprinkle in the flour and stir for about 1 minute.",
+]
+
+[[steps]]
+title = "Add the Broth"
+actions = [
+  "Pour in the chicken broth and heavy cream and stir well.",
+]
+
+[[steps]]
+title = "Season to Taste"
+actions = [
+  "Taste the soup now and season it to your liking.",
+  "A good starting point is about {1} teaspoon garlic powder, {1} teaspoon Italian seasoning, {1/2} tablespoon chicken bouillon and plenty of black pepper.",
+]
+
+[[steps]]
+title = "Finish the Soup"
+actions = [
+  "Stir in the spinach and gnocchi and cook for 2–3 minutes.",
+  "Add the chopped chicken and the parmesan, stir through and serve.",
+]
