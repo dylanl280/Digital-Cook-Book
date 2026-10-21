@@ -14,6 +14,7 @@ mode (one step at a time, timers, screen kept awake) and a servings stepper.
 - **Units:** US by default; tap Metric to switch cups and ounces to mL and grams (spoons stay as they are).
   The choice applies to every recipe.
 - **Check off** ingredients and steps by tapping them. Checks are kept for 12 hours.
+- **Dark mode** follows your phone's setting; the "Dark mode" button at the top overrides it.
 
 ## Add a recipe
 

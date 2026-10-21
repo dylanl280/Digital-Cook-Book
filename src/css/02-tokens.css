@@ -73,4 +73,33 @@
     --dur-3: 600ms;
     --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   }
+
+  /* Dark theme: the same token names, redefined, so no component needs dark-specific rules.
+     The template's greige becomes the ink on warm charcoal paper. It follows the device setting
+     unless the reader picks a theme with the header toggle (cookbook.js sets data-theme). */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper: #1A1816;
+      --paper-2: #262320;
+      --paper-3: #312D29;
+      --line-soft: #4D4741;
+      --ink: #F0EBE8;       /* 14.9:1 on dark paper */
+      --ink-2: #D8D0CA;
+      --ink-3: #A79E97;     /* 6.8:1 */
+      --ghost: #2E2A27;     /* step numerals: a shade above the paper, as in the light theme */
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #1A1816;
+    --paper-2: #262320;
+    --paper-3: #312D29;
+    --line-soft: #4D4741;
+    --ink: #F0EBE8;
+    --ink-2: #D8D0CA;
+    --ink-3: #A79E97;
+    --ghost: #2E2A27;
+  }
 }

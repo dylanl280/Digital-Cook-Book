@@ -248,11 +248,33 @@ def run(browser, base: str, recipes) -> None:
     phone.goto(base + "recipes/marry-me-chicken.html", wait_until="networkidle")
     phone.screenshot(path=str(SHOTS / "e2e-recipe-phone.png"), full_page=True)
     phone.goto(base, wait_until="networkidle")
-    phone.keyboard.press("Tab")
-    phone.keyboard.press("Tab")
-    focused = phone.evaluate("document.activeElement.className")
-    check("keyboard reaches a card link", "c-recipe-card__link" in focused or "c-toolbar__input" in focused, focused)
+    focused = ""
+    for _ in range(6):  # skip link → dark-mode toggle → (search) → first card
+        phone.keyboard.press("Tab")
+        focused = phone.evaluate("document.activeElement.className")
+        if "c-recipe-card__link" in focused:
+            break
+    check("keyboard reaches a card link", "c-recipe-card__link" in focused, focused)
     phone.context.close()
+
+    # --- dark mode: follows the device, the toggle overrides and is remembered -------------------------------
+    paper = lambda pg: pg.evaluate("getComputedStyle(document.documentElement).backgroundColor")  # noqa: E731
+    dark_ctx = browser.new_context(viewport={"width": 1280, "height": 900}, color_scheme="dark")
+    dark = dark_ctx.new_page()
+    dark.on("pageerror", lambda exc: errors.append(str(exc)))
+    dark.goto(base, wait_until="networkidle")
+    check("dark device → dark paper", paper(dark) == "rgb(26, 24, 22)", paper(dark))
+    check("toggle shows dark mode is on", dark.get_attribute('[data-js="theme-toggle"]', "aria-pressed") == "true")
+    dark.screenshot(path=str(SHOTS / "e2e-home-dark.png"))
+    dark.click('[data-js="theme-toggle"]')
+    check("toggle switches to light", paper(dark) == "rgb(240, 235, 232)", paper(dark))
+    dark.goto(base + "recipes/marry-me-chicken.html", wait_until="networkidle")
+    check("the theme choice is remembered", paper(dark) == "rgb(240, 235, 232)", paper(dark))
+    dark.click('[data-js="theme-toggle"]')
+    check("and can switch back to dark", paper(dark) == "rgb(26, 24, 22)", paper(dark))
+    dark.screenshot(path=str(SHOTS / "e2e-recipe-dark.png"), full_page=True)
+    dark_ctx.close()
+    check("light device → light paper", paper(page) == "rgb(240, 235, 232)", paper(page))
 
     check("no JavaScript errors", not errors, "; ".join(errors[:3]))
     ctx.close()

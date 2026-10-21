@@ -20,6 +20,12 @@
     text-decoration: none;
   }
 
+  .c-site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+  }
+
   .c-site-header__back {
     display: inline-flex;
     align-items: center;

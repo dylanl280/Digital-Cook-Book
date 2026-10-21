@@ -1,0 +1,35 @@
+/* "Dark mode" toggle in the header. The moon fills in while dark mode is on. */
+@layer components {
+  .c-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    min-block-size: var(--tap);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: 700 var(--text-xs) / 1 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+
+  .c-theme-toggle__icon {
+    flex: none;
+    inline-size: 1.3em;
+    block-size: 1.3em;
+  }
+
+  .c-theme-toggle__icon path {
+    fill: var(--moon-fill, none);
+  }
+
+  .c-theme-toggle[aria-pressed="true"] {
+    --moon-fill: currentColor;
+  }
+
+  @media (hover: hover) {
+    .c-theme-toggle:hover {
+      text-decoration: underline;
+    }
+  }
+}

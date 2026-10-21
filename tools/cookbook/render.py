@@ -32,7 +32,9 @@ def page(site: Site, assets: Assets, *, title: str, description: str, root: str,
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
-{robots}<meta name="theme-color" content="#F0EBE8">
+{robots}<meta name="theme-color" content="#F0EBE8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1816" media="(prefers-color-scheme: dark)">
+{THEME_BOOTSTRAP}
 {canonical_tag}<link rel="icon" href="{root}assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="{root}assets/fonts/red-hat-text.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{root}assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
@@ -52,12 +54,30 @@ def page(site: Site, assets: Assets, *, title: str, description: str, root: str,
 """
 
 
+# Applies a saved theme before the first paint, so a dark-mode reader never sees a flash of paper.
+THEME_BOOTSTRAP = ('<script>try{var t=JSON.parse(localStorage.getItem("dcb:theme"));'
+                   'if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}'
+                   'catch(e){}</script>')
+MOON_ICON = ('<svg class="c-theme-toggle__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+             '<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z" stroke="currentColor" '
+             'stroke-width="1.6" stroke-linejoin="round"/></svg>')
+
+
+def theme_toggle() -> str:
+    """Dark-mode switch (shown by cookbook.js; without JavaScript the device setting applies)."""
+    return (f'<button type="button" class="c-theme-toggle" data-js="theme-toggle" aria-pressed="false" hidden>'
+            f'{MOON_ICON}Dark mode</button>')
+
+
 def masthead(site: Site, count: int) -> str:
     return f"""<header class="c-masthead">
   <div class="l-container c-masthead__inner">
     <h1 class="c-masthead__title">{esc(site.title)}</h1>
     <p class="c-masthead__tagline">{esc(site.tagline)}</p>
-    <p class="c-masthead__count">{count} recipe{"s" if count != 1 else ""}</p>
+    <div class="c-masthead__aside">
+      <p class="c-masthead__count">{count} recipe{"s" if count != 1 else ""}</p>
+      {theme_toggle()}
+    </div>
   </div>
 </header>"""
 
@@ -66,7 +86,10 @@ def site_header(site: Site, root: str) -> str:
     return f"""<header class="c-site-header">
   <div class="l-container c-site-header__inner">
     <a class="c-site-header__brand" href="{root}index.html">{esc(site.title)}</a>
-    <a class="c-site-header__back" href="{root}index.html" data-js="back">{BACK_ARROW} All recipes</a>
+    <div class="c-site-header__actions">
+      {theme_toggle()}
+      <a class="c-site-header__back" href="{root}index.html" data-js="back">{BACK_ARROW} All recipes</a>
+    </div>
   </div>
 </header>"""
 
@@ -437,15 +460,15 @@ def not_found_main(root: str) -> str:
 </div>"""
 
 
-SWATCHES = [
-    ("--paper", "#F0EBE8", "Page background (template)"),
-    ("--paper-2", "#E8E1DC", "Photo placeholders, hover wash"),
-    ("--paper-3", "#DDD4CE", "Quiet fills"),
-    ("--line-soft", "#CBC1BA", "Decorative lines only"),
-    ("--ink", "#000000", "Text, frames, buttons (17.8:1)"),
-    ("--ink-2", "#3A3430", "Primary hover (10.4:1)"),
-    ("--ink-3", "#6B625B", "Lightest text colour (5.0:1)"),
-    ("--ghost", "#FFFFFF", "Ghost numerals (decorative)"),
+SWATCHES = [  # token, light, dark, use
+    ("--paper", "#F0EBE8", "#1A1816", "Page background (template)"),
+    ("--paper-2", "#E8E1DC", "#262320", "Photo placeholders, hover wash"),
+    ("--paper-3", "#DDD4CE", "#312D29", "Quiet fills"),
+    ("--line-soft", "#CBC1BA", "#4D4741", "Decorative lines only"),
+    ("--ink", "#000000", "#F0EBE8", "Text, frames, buttons (17.8:1 / 14.9:1)"),
+    ("--ink-2", "#3A3430", "#D8D0CA", "Primary hover"),
+    ("--ink-3", "#6B625B", "#A79E97", "Lightest text colour (5.0:1 / 6.8:1)"),
+    ("--ghost", "#FFFFFF", "#2E2A27", "Ghost numerals (decorative)"),
 ]
 TYPE_ROLES = [
     ("Chapter line · League Spartan 700", "c-recipe-header__chapter", "Meals with Chicken"),
@@ -463,7 +486,8 @@ SPACES = ["--space-3xs", "--space-2xs", "--space-xs", "--space-s", "--space-m", 
 def styleguide_main(site: Site, samples: list[Recipe]) -> str:
     swatches = "".join(
         f'<div class="c-swatch"><div class="c-swatch__chip" style="--swatch: var({token})"></div>'
-        f'<p><code>{token}</code><br>{hexv}<br>{esc(use)}</p></div>' for token, hexv, use in SWATCHES)
+        f'<p><code>{token}</code><br>{light} · dark {dark}<br>{esc(use)}</p></div>'
+        for token, light, dark, use in SWATCHES)
     roles = "".join(
         f'<div class="c-styleguide__row"><p class="c-styleguide__label">{esc(label)}</p>'
         f'<p class="{cls}">{esc(text)}</p></div>' for label, cls, text in TYPE_ROLES)
