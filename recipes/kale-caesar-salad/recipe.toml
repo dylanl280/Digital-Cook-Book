@@ -14,10 +14,10 @@ prep_minutes = 20
 cook_minutes = 10
 signoff = "Shower it with crumbs and parmesan, and dig in while it's still crunchy!"
 notes = [
-  "The times above are for the salad; making the garlic breadcrumbs adds about 15 minutes (5 to prep, 10 to cook).",
+  "The times above are for the salad; toasting the garlic breadcrumbs adds about 10 minutes.",
   "Make ahead: toast the breadcrumbs and slice the kale 1–2 days early. Keep the kale ribbons covered in the fridge and wait to massage them until just before serving. Peeled hard-boiled eggs keep in a covered container in the fridge for up to a week.",
   "The dressing makes about 1 cup, more than this salad needs. It's best freshly made but keeps for 1–2 days in an airtight container in the fridge; let it sit at room temperature for 20 minutes and stir well before using.",
-  "The breadcrumbs are A Beautiful Plate's own Crispy Garlic Bread Crumbs recipe, which the salad links to. A batch makes about 1 cup, and leftovers keep in an airtight container at room temperature for 3–4 days.",
+  "The crumbs follow A Beautiful Plate's Crispy Garlic Bread Crumbs method, made by the small panful. Leftovers keep in an airtight container at room temperature for 3–4 days.",
   "For a gluten-free version, swap the breadcrumbs for crunchy roasted chickpeas or homemade garlic chips.",
 ]
 
@@ -39,20 +39,11 @@ accessed = 2026-10-19
 group = "For the salad"
 items = [
   "2 bunches ({12–14} ounces) Tuscan (lacinato) kale",
-  "Extra virgin olive oil, for drizzling",
+  "Extra virgin olive oil, for toasting and drizzling",
+  "A small pan full of panko breadcrumbs",
+  "1 garlic clove, smashed, for the breadcrumbs",
   "Parmigiano-Reggiano cheese, as desired, for topping",
   "Hard-boiled eggs (optional)",
-]
-
-[[ingredients]]
-group = "For the garlic breadcrumbs"
-items = [
-  "3 tablespoons ({45} mL) extra virgin olive oil",
-  "2 large garlic cloves, smashed",
-  "1 cup ({80} g) panko breadcrumbs (or homemade coarse breadcrumbs)",
-  "1/4 teaspoon kosher salt",
-  "1/4 teaspoon freshly ground black pepper",
-  "Finely chopped fresh herbs, such as parsley, thyme or rosemary (optional)",
 ]
 
 [[ingredients]]
@@ -81,10 +72,9 @@ actions = [
 [[steps]]
 title = "Toast the Breadcrumbs"
 actions = [
-  "Set a medium skillet (8 to 10 inches) over medium heat with the {3} tablespoons of olive oil. Stir the smashed garlic around in it for about 2–3 minutes, until it smells fragrant and turns lightly golden.",
-  "Add the panko and stir to coat it evenly in the garlicky oil. Keep cooking, stirring and tossing often, until deeply golden, about 4–6 minutes.",
-  "Season with the salt and pepper, and stir in the herbs if you're using them.",
-  "Tip the crumbs into a large bowl right away to cool. Eat the garlic cloves or discard them.",
+  "Warm a little olive oil in a small pan over medium heat. Stir the smashed garlic around in it for about 2–3 minutes, until it smells fragrant and turns lightly golden.",
+  "Fill the pan with panko and stir to coat it in the garlicky oil. Keep tossing until deeply golden, about 4–6 minutes.",
+  "Season with a pinch of salt and pepper, then tip the crumbs out to cool. Eat the garlic or discard it.",
 ]
 
 [[steps]]
