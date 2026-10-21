@@ -16,7 +16,10 @@ notes = [
 ]
 
 [photo]
-pending = "Waiting for a screenshot of the finished dish"
+file = "hero"
+alt = "Campanelle in a glossy miso brown-butter sauce with sweet corn, basil and black pepper, in a white bowl on a wooden slat table"
+focal = "50% 50%"
+credit = "supplied by the cookbook owner"
 
 [source]
 kind = "video"
