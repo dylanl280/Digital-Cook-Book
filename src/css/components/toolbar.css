@@ -1,0 +1,95 @@
+/* Search box + chapter chips above the home grid (rendered once the cookbook is big enough). */
+@layer components {
+  .c-toolbar {
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .c-toolbar__search {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    border-block-end: var(--rule);
+  }
+
+  .c-toolbar__search:focus-within {
+    border-block-end: var(--frame);
+  }
+
+  .c-toolbar__label {
+    font: 700 var(--text-xs) / 1 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+
+  .c-toolbar__input {
+    flex: 1;
+    min-inline-size: 0;
+    min-block-size: var(--tap);
+    border: 0;
+    background: transparent;
+    font-size: var(--text-base);
+  }
+
+  .c-toolbar__input:focus-visible {
+    outline: none;
+  }
+
+  .c-toolbar__chips {
+    display: flex;
+    gap: var(--space-2xs);
+    min-inline-size: 0;
+    overflow-x: auto;
+    margin: 0;
+    margin-inline: calc(-1 * var(--space-3xs));
+    padding: var(--space-3xs);
+    border: 0;
+    scrollbar-width: none;
+  }
+
+  .c-toolbar__status {
+    font-size: var(--text-sm);
+    color: var(--ink-3);
+  }
+
+  .c-chip {
+    position: relative;
+    flex: none;
+  }
+
+  .c-chip__input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+  }
+
+  .c-chip__label {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.25rem;
+    padding-inline: var(--space-s);
+    border: var(--rule);
+    background: var(--chip-bg, transparent);
+    color: var(--chip-fg, var(--ink));
+    font: 700 var(--text-xs) / 1 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+
+  .c-chip:has(:checked) {
+    --chip-bg: var(--ink);
+    --chip-fg: var(--paper);
+  }
+
+  .c-chip:has(:focus-visible) {
+    outline: var(--frame);
+    outline-offset: 2px;
+  }
+
+  @media (pointer: coarse) {
+    .c-chip__label {
+      min-block-size: var(--tap);
+    }
+  }
+}

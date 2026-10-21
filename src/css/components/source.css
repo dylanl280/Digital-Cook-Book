@@ -1,0 +1,15 @@
+/* Attribution: "Adapted from …" and the photo credit. */
+@layer components {
+  .c-source {
+    display: grid;
+    gap: var(--space-3xs);
+    padding-block-start: var(--space-m);
+    border-block-start: var(--rule-soft);
+    font-size: var(--text-sm);
+    color: var(--ink-3);
+  }
+
+  .c-source__link {
+    color: var(--ink);
+  }
+}

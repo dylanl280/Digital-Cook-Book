@@ -1,0 +1,6 @@
+/* The template's closing line ("Enjoy your healthy and delicious meal!"), set like body text as on the A4 page. */
+@layer components {
+  .c-signoff {
+    font: 400 var(--text-base) / var(--leading-body) var(--font-text);
+  }
+}

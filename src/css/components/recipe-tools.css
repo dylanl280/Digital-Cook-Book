@@ -1,0 +1,25 @@
+/* Start cooking + servings stepper + clear checks (JavaScript-only, so hidden until the script runs). */
+@layer components {
+  .c-recipe-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s) var(--space-m);
+    padding-block: var(--space-m);
+    border-block: var(--rule-soft);
+  }
+
+  .c-recipe-tools__group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s);
+  }
+
+  .c-recipe-tools__hint {
+    flex-basis: 100%;
+    font-size: var(--text-sm);
+    color: var(--ink-3);
+  }
+}

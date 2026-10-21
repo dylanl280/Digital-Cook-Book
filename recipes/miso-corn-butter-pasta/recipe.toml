@@ -1,0 +1,79 @@
+schema = 1
+title = "Miso Corn Butter Pasta"
+chapter = "meatless"
+status = "published"
+added = 2026-10-19
+tags = ["pasta", "quick", "summer", "vegetarian", "weeknight"]
+description = """
+Sweet summer corn works twice in this pasta: the kernels go into a nutty brown-butter miso \
+sauce, and the bare cobs simmer into a light stock that makes it silky. Campanelle catches \
+every drop, while basil, lemon and black pepper keep it bright. It's ready in about 15 minutes, \
+so make it the moment good corn shows up."""
+total_minutes = 15
+signoff = "Make it while the corn is sweet, and enjoy every buttery bite!"
+notes = [
+  "No miso? For a brighter version, swap it for fresh thyme, squeeze in extra lemon and add a little chili flake.",
+]
+
+[photo]
+pending = "Waiting for a screenshot of the finished dish"
+
+[source]
+kind = "video"
+name = "@maxdelicious on TikTok"
+url = "https://www.tiktok.com/@maxdelicious/video/7521378312996801823"
+accessed = 2026-10-19
+
+[[ingredients]]
+items = [
+  "1 box campanelle pasta",
+  "2 ears corn, shucked",
+  "4 cups water (roughly), for the cob stock",
+  "5 tablespoons butter",
+  "2 tablespoons white miso",
+  "1 handful fresh basil",
+  "1 lemon, for serving",
+  "Salt and freshly ground black pepper",
+]
+
+[[steps]]
+title = "Make a Cob Stock"
+actions = [
+  "Slice the kernels from the corn and keep them to one side.",
+  "Break the cobs in half, put them in a small pot and add about {4} cups of water.",
+  "Let it bubble over medium heat until the liquid is down by half, then set the stock aside.",
+]
+
+[[steps]]
+title = "Boil the Pasta"
+actions = [
+  "Cook the pasta in a big pot of generously salted boiling water; the sauce comes together while it boils.",
+]
+
+[[steps]]
+title = "Brown the Butter"
+actions = [
+  "In a saucier or medium pot over medium heat, cook the butter, whisking the whole time, until it turns brown. Stay close: it can burn quickly.",
+  "Pull the pan off the heat and whisk in the miso until no lumps remain.",
+]
+
+[[steps]]
+title = "Build the Sauce"
+actions = [
+  "Return the pan to low heat and pour in most of the cob stock, then add a pinch of salt and the corn kernels.",
+  "Stir until the butter and stock emulsify into a smooth sauce, then hold it over low heat.",
+]
+
+[[steps]]
+title = "Toss the Pasta"
+actions = [
+  "Lift the pasta into the sauce while it still has a little bite, and toss to coat.",
+  "Keep stirring over low heat, loosening with splashes of pasta water until the sauce clings to every piece.",
+]
+
+[[steps]]
+title = "Finish and Serve"
+actions = [
+  "Just before serving, stir the fresh basil through.",
+  "Finish each plate with plenty of fresh lemon juice and a few grinds of black pepper.",
+]

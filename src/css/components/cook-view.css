@@ -1,0 +1,202 @@
+/* Full-screen cook mode (a modal <dialog>), modeled on Claude's recipe-card cooking mode:
+   Gather → one step per screen → Finish, in the template's paper-and-ink language. */
+@layer components {
+  .c-cook-view {
+    --tray-offset: 6rem;
+    inline-size: 100%;
+    max-inline-size: none;
+    block-size: 100%;
+    max-block-size: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .c-cook-view[open] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .c-cook-view::backdrop {
+    background: var(--paper);
+  }
+
+  :root[data-cook] {
+    overflow: hidden;
+  }
+
+  .c-cook-view__bar {
+    display: grid;
+    gap: var(--space-xs);
+    padding: max(var(--space-s), env(safe-area-inset-top)) var(--gutter) var(--space-2xs);
+    border-block-end: var(--rule-soft);
+  }
+
+  .c-cook-view__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+
+  .c-cook-view__titles {
+    display: grid;
+    min-inline-size: 0;
+  }
+
+  .c-cook-view__recipe {
+    overflow: hidden;
+    font: 700 var(--text-xs) / 1.3 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .c-cook-view__count,
+  .c-cook-view__wake {
+    font-size: var(--text-sm);
+    color: var(--ink-3);
+  }
+
+  .c-cook-view__actions {
+    display: flex;
+    flex: none;
+    gap: var(--space-2xs);
+  }
+
+  .c-cook-view__progress {
+    display: flex;
+    gap: var(--space-3xs);
+  }
+
+  .c-cook-view__seg {
+    display: grid;
+    flex: 1;
+    align-items: center;
+    block-size: 1.5rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .c-cook-view__seg::before {
+    content: "";
+    display: block;
+    block-size: var(--seg-size, 3px);
+    background: var(--seg-color, var(--ink-3));
+  }
+
+  .c-cook-view__seg[data-state="done"] {
+    --seg-color: var(--ink);
+  }
+
+  .c-cook-view__seg[aria-current="step"] {
+    --seg-color: var(--ink);
+    --seg-size: 6px;
+  }
+
+  @media (pointer: coarse) {
+    .c-cook-view__seg {
+      block-size: var(--tap);
+    }
+  }
+
+  .c-cook-view__stage {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--space-xl) var(--gutter) calc(var(--space-xl) + var(--tray-space, 0px));
+    scroll-padding-block-end: var(--tray-space, 0px);
+    touch-action: pan-y;
+  }
+
+  .c-cook-view__slide {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-content: start;
+    gap: var(--space-m);
+    inline-size: min(100%, 44rem);
+    margin-inline: auto;
+  }
+
+  .c-cook-view__ghost {
+    position: absolute;
+    z-index: -1;
+    inset-block-start: -0.12em;
+    inset-inline-start: -0.04em;
+    font: 400 calc(var(--text-cook-title) * var(--ghost-scale)) / 1 var(--font-display);
+    color: var(--ghost);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .c-cook-view__kicker {
+    font: 700 var(--text-xs) / 1.2 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .c-cook-view__heading {
+    font: 400 var(--text-cook-title) / var(--leading-heading) var(--font-display);
+  }
+
+  .c-cook-view__ghost + .c-cook-view__heading {
+    padding-block-start: 0.55em;
+    padding-inline-start: 0.85em;
+  }
+
+  .c-cook-view__heading:focus {
+    outline: none;
+  }
+
+  .c-cook-view__body {
+    display: grid;
+    gap: var(--space-xs);
+    font-size: var(--text-cook);
+  }
+
+  .c-cook-view__signoff {
+    font: 400 var(--text-cook-title) / var(--leading-heading) var(--font-display);
+  }
+
+  .c-cook-view__nav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--space-s);
+    padding: var(--space-s) var(--gutter) max(var(--space-s), env(safe-area-inset-bottom));
+    border-block-start: var(--rule-soft);
+  }
+
+  .c-cook-view__nav-btn {
+    min-block-size: 3.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .c-cook-view__slide {
+      animation: c-cook-slide var(--dur-2) var(--ease-out);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .c-cook-view__seg::before {
+      forced-color-adjust: none;
+      background: GrayText;
+    }
+
+    .c-cook-view__seg[aria-current="step"]::before {
+      background: CanvasText;
+    }
+  }
+
+  @keyframes c-cook-slide {
+    from {
+      opacity: 0;
+      transform: translateX(calc(var(--slide-dir, 1) * 1.5rem));
+    }
+  }
+}

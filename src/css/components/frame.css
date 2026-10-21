@@ -1,0 +1,25 @@
+/* The template's signature 2px black photo frame. Set --ratio and --focal per use. */
+@layer components {
+  .c-frame {
+    position: relative;
+    aspect-ratio: var(--ratio, auto);
+    overflow: hidden;
+    margin: 0;
+    border: var(--frame);
+    background: var(--paper-2);
+  }
+
+  .c-frame__img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: var(--focal, 50% 50%);
+    transform: scale(var(--zoom, 1));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .c-frame__img {
+      transition: transform var(--dur-3) var(--ease-out);
+    }
+  }
+}

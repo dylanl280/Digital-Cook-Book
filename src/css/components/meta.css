@@ -1,0 +1,46 @@
+/* Serves / Prep Time / Cook Time block. Bold lines beside the photo; a 3-across strip on phones. */
+@layer components {
+  .c-meta {
+    display: grid;
+    gap: var(--space-3xs);
+    font-weight: var(--weight-strong);
+  }
+
+  .c-meta__item {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.3em;
+  }
+
+  .c-meta__term::after {
+    content: ":";
+  }
+
+  .c-meta__value {
+    margin: 0;
+  }
+
+  @container (inline-size < 44rem) {
+    .c-meta {
+      grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+      gap: var(--space-s);
+      padding-block-start: var(--space-s);
+      border-block-start: var(--rule-soft);
+    }
+
+    .c-meta__item {
+      flex-direction: column;
+    }
+
+    .c-meta__term {
+      font: 700 var(--text-xs) / 1.2 var(--font-label);
+      letter-spacing: var(--track-label);
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    .c-meta__term::after {
+      content: none;
+    }
+  }
+}

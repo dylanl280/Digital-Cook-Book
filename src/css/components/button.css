@@ -1,0 +1,43 @@
+/* Square, framed buttons. Primary = ink fill. Colour changes are instant (motion is transform/opacity only). */
+@layer components {
+  .c-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    min-block-size: var(--tap);
+    padding: var(--space-2xs) var(--space-m);
+    border: var(--frame);
+    background: var(--button-bg, transparent);
+    color: var(--button-fg, var(--ink));
+    font: var(--weight-strong) var(--text-sm) / 1 var(--font-text);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .c-button--primary {
+    --button-bg: var(--ink);
+    --button-fg: var(--paper);
+  }
+
+  .c-button--compact {
+    padding-inline: var(--space-s);
+    letter-spacing: 0.04em;
+  }
+
+  .c-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  @media (hover: hover) {
+    .c-button:hover {
+      --button-bg: var(--paper-2);
+    }
+
+    .c-button--primary:hover {
+      --button-bg: var(--ink-2);
+    }
+  }
+}

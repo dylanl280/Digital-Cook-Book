@@ -1,0 +1,83 @@
+schema = 1
+title = "Summer Salmon Skillet"
+chapter = "seafood"
+status = "published"
+added = 2026-10-19
+tags = ["one-pan", "quick", "skillet", "summer", "weeknight"]
+description = """
+Salmon fillets get a cumin and paprika rub and a slick of harissa, then roast in a preheated \
+skillet surrounded by red and yellow cherry tomatoes, shallot and garlic. Crumbled feta and fresh \
+dill go on at the end. It's a bright, summery dinner that's ready in about 25 minutes."""
+serves = 4
+prep_minutes = 10
+total_minutes = 25
+signoff = "Serve it straight from the skillet, and mind the hot handle!"
+
+[photo]
+file = "hero"
+alt = "Harissa-rubbed salmon fillets in a stainless steel skillet with red and yellow cherry tomatoes, crumbled feta and fresh dill"
+focal = "50% 50%"
+credit = "Delish"
+credit_url = "https://www.delish.com/cooking/recipe-ideas/a65402547/summer-salmon-skillet-recipe/"
+
+[source]
+kind = "website"
+name = "Delish"
+author = "Brooke Caison"
+url = "https://www.delish.com/cooking/recipe-ideas/a65402547/summer-salmon-skillet-recipe/"
+accessed = 2026-10-19
+
+[[ingredients]]
+items = [
+  "4 (5- to 6-oz.) center-cut skinless salmon fillets",
+  "1/2 teaspoon ground cumin",
+  "1/2 teaspoon sweet paprika",
+  "2 1/4 teaspoons kosher salt, divided",
+  "1 tablespoon harissa paste",
+  "1 shallot, finely chopped",
+  "3 garlic cloves, thinly sliced",
+  "8 oz. yellow and red grape or cherry tomatoes",
+  "3 tablespoons extra-virgin olive oil, divided",
+  "2 tablespoons crumbled feta or goat cheese",
+  "1 tablespoon finely chopped fresh dill",
+]
+
+[[steps]]
+title = "Heat the Skillet"
+actions = [
+  "Set a rack in the center of the oven and place a large stainless steel or cast-iron skillet on it.",
+  "Preheat the oven to 450°F (230°C) with the skillet inside.",
+]
+
+[[steps]]
+title = "Season the Salmon"
+actions = [
+  "Pat the salmon dry, then season it all over with the cumin, paprika and {1 1/2} teaspoons of the salt.",
+  "Rub the harissa paste over one side of each fillet.",
+]
+
+[[steps]]
+title = "Toss the Tomatoes"
+actions = [
+  "In a medium bowl, toss the shallot, garlic and tomatoes with {1} tablespoon of the oil.",
+  "Season with the remaining {3/4} teaspoon of salt and toss again.",
+]
+
+[[steps]]
+title = "Fill the Skillet"
+actions = [
+  "Using an oven mitt or a dry kitchen towel, take the hot skillet out of the oven and drizzle in the remaining {2} tablespoons of oil.",
+  "Lay the salmon in the skillet harissa side up and scatter the tomato mixture around the fish.",
+]
+
+[[steps]]
+title = "Bake"
+actions = [
+  "Bake for 9 to 11 minutes, until the salmon flakes easily with a fork and the tomatoes have softened.",
+]
+
+[[steps]]
+title = "Finish"
+actions = [
+  "Top the salmon and tomatoes with the feta and dill.",
+]

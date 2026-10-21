@@ -1,0 +1,77 @@
+/* Numbered steps with the template's giant white "ghost" numerals. The <ol> carries the real
+   numbering for assistive tech; the numeral is decoration (alt text ""). */
+@layer components {
+  .c-steps {
+    display: grid;
+    gap: var(--space-l);
+    counter-reset: step;
+  }
+
+  .c-steps__step {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    gap: var(--space-2xs);
+    counter-increment: step;
+  }
+
+  .c-steps__step::before {
+    content: counter(step);
+    content: counter(step) / "";
+    position: absolute;
+    z-index: -1;
+    inset-block-start: -0.18em;
+    inset-inline-start: -0.02em;
+    font: 400 calc(var(--text-step) * 3) / 1 var(--font-display);
+    font-variant-numeric: lining-nums proportional-nums;
+    color: var(--ghost);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .c-steps__title {
+    padding-block-start: 0.35em;
+    padding-inline-start: 2.1em; /* clears the in-column numeral on phones */
+    font: 400 var(--text-step) / var(--leading-heading) var(--font-display);
+  }
+
+  .c-steps__title::after {
+    content: ":";
+    content: ":" / "";
+  }
+
+  .c-steps__actions {
+    display: grid;
+    padding-inline-start: 0.5em;
+  }
+
+  /* Wide screens: the numeral hangs into the left margin, as on the A4 page. */
+  @media (width >= 48rem) {
+    .c-steps__step::before {
+      inset-block-start: -0.22em;
+      inset-inline: auto calc(100% - 0.19em);
+      font-size: calc(var(--text-step) * var(--ghost-scale));
+    }
+
+    .c-steps__title {
+      padding-block-start: 0;
+      padding-inline-start: 0.8em;
+    }
+
+    .c-steps__actions {
+      padding-inline-start: 0.6em;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .c-steps__step::before {
+      color: var(--ink-3);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .c-steps__step::before {
+      color: GrayText;
+    }
+  }
+}

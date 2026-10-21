@@ -1,0 +1,47 @@
+# Site-wide settings for the Digital Cook Book.
+
+title = "Digital Cook Book"
+tagline = "Recipes cooked over time"
+base_url = "https://dylanl280.github.io/Digital-Cook-Book/"
+lang = "en"
+indexable = false   # false: every page gets <meta name="robots" content="noindex">
+
+[home]
+sort = "title"      # "title" = A–Z, "added" = newest first
+
+[search]
+min_recipes = 13    # the search box + chapter chips appear once the cookbook has this many recipes
+
+# Chapters mirror the template's "MEALS WITH CHICKEN" heading. Order here is the chip order.
+[[chapters]]
+key = "chicken"
+title = "Meals with Chicken"
+short = "Chicken"
+
+[[chapters]]
+key = "beef"
+title = "Meals with Beef"
+short = "Beef"
+
+[[chapters]]
+key = "pork"
+title = "Meals with Pork"
+short = "Pork"
+
+[[chapters]]
+key = "seafood"
+title = "Meals with Seafood"
+short = "Seafood"
+
+[[chapters]]
+key = "meatless"
+title = "Meatless Meals"
+short = "Meatless"
+
+[tags]
+# Recipes may only use these tags (the build rejects typos). Add new ones here first.
+allowed = [
+  "breakfast", "comfort-food", "creamy", "dinner", "gluten-free", "grill", "lunch",
+  "make-ahead", "no-cook", "one-pan", "one-pot", "pasta", "pizza", "quick", "salad",
+  "sheet-pan", "skillet", "soup", "spicy", "summer", "vegetarian", "weeknight",
+]

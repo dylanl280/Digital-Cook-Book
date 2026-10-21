@@ -1,0 +1,87 @@
+schema = 1
+title = "Marry Me Chicken"
+chapter = "chicken"
+status = "published"
+added = 2026-10-19
+tags = ["creamy", "one-pan", "quick", "weeknight"]
+description = """
+Thin, golden chicken cutlets simmered in a silky parmesan cream sauce with sun-dried tomatoes, \
+garlic and a pinch of chili. Everything happens in one skillet in about 25 minutes, and it \
+lives up to its famous name. Serve it over pasta or rice to catch every drop of sauce."""
+serves = 6
+prep_minutes = 10
+cook_minutes = 15
+signoff = "Serve warm over pasta or rice, and enjoy every last drop of sauce!"
+
+[photo]
+file = "hero"
+alt = "Seared chicken breasts in a creamy sun-dried tomato sauce in a steel skillet, with a spoon resting in the sauce"
+focal = "50% 45%"
+credit = "supplied by the cookbook owner"
+
+[source]
+kind = "website"
+name = "Little Sunny Kitchen"
+url = "https://littlesunnykitchen.com/marry-me-chicken/"
+accessed = 2026-10-19
+
+[[ingredients]]
+items = [
+  "3 large chicken breasts (boneless and skinless), sliced lengthwise into thin cutlets",
+  "1/2 teaspoon salt",
+  "1/4 teaspoon ground black pepper",
+  "6 tablespoons all-purpose flour",
+  "2 tablespoons olive oil",
+  "2 tablespoons unsalted butter",
+  "3 cloves garlic, minced",
+  "1 cup chicken stock",
+  "1 cup heavy cream (double cream in the UK)",
+  "1/2 cup grated parmesan cheese",
+  "1 teaspoon chili flakes",
+  "1/4 teaspoon dried oregano",
+  "1/4 teaspoon dried thyme",
+  "1/3 cup sun-dried tomatoes, chopped",
+  "1 tablespoon fresh basil leaves, chopped",
+]
+
+[[steps]]
+title = "Prep the Chicken"
+actions = [
+  "Season the chicken cutlets on both sides with the salt and pepper.",
+  "Dredge them in the flour and shake off any excess.",
+]
+
+[[steps]]
+title = "Brown the Chicken"
+actions = [
+  "Heat the olive oil and melt the butter in a large skillet over medium heat, swirling to coat the pan.",
+  "Cook the cutlets in batches for 4 to 5 minutes per side, until golden and cooked through (165°F / 74°C inside).",
+  "Move them to a plate and cover to keep warm.",
+]
+
+[[steps]]
+title = "Start the Sauce"
+actions = [
+  "In the same skillet, sauté the garlic for about a minute, until fragrant.",
+  "Pour in the chicken stock and scrape up the browned bits from the bottom of the pan.",
+]
+
+[[steps]]
+title = "Make It Creamy"
+actions = [
+  "Turn the heat down to medium-low and stir in the cream and parmesan.",
+  "Let it simmer for a couple of minutes, then season with the chili flakes, oregano and thyme.",
+]
+
+[[steps]]
+title = "Bring It Together"
+actions = [
+  "Taste and season with salt and pepper, then stir in the sun-dried tomatoes.",
+  "Return the chicken to the skillet and simmer a few minutes more, until the sauce thickens.",
+]
+
+[[steps]]
+title = "Serve"
+actions = [
+  "Scatter the basil over the top and serve warm.",
+]

@@ -1,0 +1,64 @@
+/* A tap-to-check line (ingredient or step action). Unchecked, the box is the template's small
+   black bullet; checked, it becomes a tick and the text fades and strikes through. */
+@layer components {
+  .c-check {
+    display: grid;
+    grid-template-columns: 1.6em minmax(0, 1fr);
+    align-items: start;
+    padding-block: 0.15em;
+    break-inside: avoid;
+  }
+
+  .c-check__box {
+    display: grid;
+    place-content: center;
+    justify-self: center;
+    inline-size: 1.1em;
+    block-size: 1.1em;
+    margin: 0;
+    margin-block-start: calc((1lh - 1.1em) / 2);
+    border: 1px solid transparent;
+    border-radius: 50%;
+    appearance: none;
+  }
+
+  .c-check__box::before {
+    content: "";
+    inline-size: 0.32em;
+    block-size: 0.32em;
+    border-radius: 50%;
+    background: var(--ink);
+  }
+
+  .c-check__box:checked::before {
+    inline-size: 0.72em;
+    block-size: 0.72em;
+    border-radius: 0;
+    background: var(--ink-3);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  .c-check:has(:checked) {
+    --check-color: var(--ink-3);
+    --check-line: line-through;
+  }
+
+  .c-check__label {
+    color: var(--check-color, inherit);
+    text-decoration-line: var(--check-line, none);
+    text-decoration-thickness: 1px;
+  }
+
+  @media (hover: hover) {
+    .c-check__box:hover {
+      border-color: var(--ink-3);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .c-check__box::before {
+      forced-color-adjust: none;
+      background: CanvasText;
+    }
+  }
+}

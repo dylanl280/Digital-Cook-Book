@@ -1,0 +1,44 @@
+/* Home page masthead: the cookbook's title in the template's chapter-line voice. */
+@layer components {
+  .c-masthead {
+    border-block-end: var(--rule);
+  }
+
+  .c-masthead__inner {
+    display: grid;
+    gap: var(--space-xs);
+    padding-block: var(--section-gap) var(--space-l);
+  }
+
+  .c-masthead__title {
+    font: 700 var(--text-display) / 0.95 var(--font-label);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+  }
+
+  .c-masthead__tagline {
+    font: 400 var(--text-step) / var(--leading-heading) var(--font-display);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+
+  .c-masthead__count {
+    font: 700 var(--text-xs) / 1 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  @media (width >= 48rem) {
+    .c-masthead__inner {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+    }
+
+    .c-masthead__count {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      padding-block-end: 0.3em;
+    }
+  }
+}

@@ -1,0 +1,71 @@
+/* Element defaults: paper, ink, and the three type roles. */
+@layer base {
+  html {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-text);
+    line-height: var(--leading-body);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-padding-block-end: 7rem; /* keeps focused content clear of the timer tray */
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 100dvh;
+    padding-block-end: var(--tray-space, 0px); /* room for the timer tray when it's showing */
+    font-size: var(--text-base);
+    overflow-x: clip;
+  }
+
+  main {
+    flex: 1;
+    padding-block-end: var(--section-gap);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 400;
+    line-height: var(--leading-heading);
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
+  :focus-visible {
+    outline: var(--frame);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  @media (hover: hover) {
+    a:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+}
+
+/* Cross-document crossfade between pages (ignored where unsupported). */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}

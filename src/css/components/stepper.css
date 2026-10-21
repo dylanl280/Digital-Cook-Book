@@ -1,0 +1,44 @@
+/* Servings stepper: "Servings − 6 +", modeled on Claude's recipe cards. */
+@layer components {
+  .c-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .c-stepper__label {
+    margin-inline-end: var(--space-3xs);
+    font: 700 var(--text-xs) / 1 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+
+  .c-stepper__btn {
+    display: grid;
+    place-items: center;
+    inline-size: var(--tap);
+    block-size: var(--tap);
+    padding: 0;
+    border: var(--frame);
+    background: var(--stepper-bg, transparent);
+    font: var(--weight-strong) var(--text-base) / 1 var(--font-text);
+  }
+
+  .c-stepper__btn[aria-disabled="true"] {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .c-stepper__value {
+    min-inline-size: 3ch;
+    font: var(--weight-strong) var(--text-base) / 1 var(--font-text);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  @media (hover: hover) {
+    .c-stepper__btn:hover {
+      --stepper-bg: var(--paper-2);
+    }
+  }
+}
