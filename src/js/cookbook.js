@@ -97,31 +97,86 @@
     if (pos < text.length) el.appendChild(doc.createTextNode(text.slice(pos)));
   }
 
+  /* US ↔ metric. Spoons are never converted (the build only tags cups, oz, lb, pints, quarts,
+     gallons, g, kg, mL and L); 1 cup = 240 mL as in most kitchen conversions. */
+  var UNIT_INFO = {
+    cup: { sys: "us", ml: 240 }, pint: { sys: "us", ml: 480 }, quart: { sys: "us", ml: 960 },
+    gallon: { sys: "us", ml: 3840 }, oz: { sys: "us", g: 28.35 }, lb: { sys: "us", g: 453.6 },
+    ml: { sys: "metric", ml: 1 }, l: { sys: "metric", ml: 1000 }, g: { sys: "metric", g: 1 },
+    kg: { sys: "metric", g: 1000 }
+  };
+
+  /* convert(1.5, null, "cup", "metric") → { lo: "360", hi: null, one: "mL", many: "mL" } */
+  function convert(lo, hi, unit, target) {
+    var info = UNIT_INFO[unit];
+    var top = hi === null ? lo : hi;
+    function pick(per, kind, places, one, many) {
+      return {
+        lo: formatAmount(lo / per, kind, places),
+        hi: hi === null ? null : formatAmount(hi / per, kind, places),
+        one: one, many: many
+      };
+    }
+    if (target === "metric") {
+      if (info.ml) {
+        return top * info.ml >= 1000 ? pick(1000 / info.ml, "dec", 1, "L", "L")
+          : pick(1 / info.ml, "metric", 0, "mL", "mL");
+      }
+      return top * info.g >= 1000 ? pick(1000 / info.g, "dec", 1, "kg", "kg")
+        : pick(1 / info.g, "metric", 0, "g", "g");
+    }
+    if (info.ml) {
+      var ml = top * info.ml;
+      if (ml < 15) return pick(5 / info.ml, "frac", 0, "tsp", "tsp");
+      if (ml < 60) return pick(15 / info.ml, "frac", 0, "tbsp", "tbsp");
+      return pick(240 / info.ml, "frac", 0, "cup", "cups");
+    }
+    var oz = top * info.g / 28.35;
+    if (oz >= 16) return pick(453.6 / info.g, "frac", 0, "lb", "lb");
+    return pick(28.35 / info.g, oz >= 10 ? "int" : "frac", 0, "oz", "oz");
+  }
+
   var originals = new Map();
 
-  function applyScale(factor) {
+  /* Show every amount at `factor` × the recipe, converted into `target` ("us"/"metric") when the
+     reader has switched away from the recipe's own system (target null = as written). */
+  function applyAmounts(factor, target) {
     $$("[data-q]").forEach(function (el) {
       var n = el.querySelector("[data-qty-n]");
       var u = el.querySelector("[data-one]");
       if (!originals.has(n)) originals.set(n, Array.prototype.slice.call(n.childNodes));
       if (u && !originals.has(u)) originals.set(u, u.textContent);
-      if (factor === 1) {
+      var unit = el.getAttribute("data-unit");
+      var converting = target && unit && UNIT_INFO[unit] && UNIT_INFO[unit].sys !== target;
+      if (factor === 1 && !converting) {
         n.textContent = "";
         originals.get(n).forEach(function (node) { n.appendChild(node); });
         if (u) u.textContent = originals.get(u);
         return;
       }
-      var kind = el.getAttribute("data-fmt");
-      var places = Number(el.getAttribute("data-places") || 0);
-      var lo = formatAmount(Number(el.getAttribute("data-q")) * factor, kind, places);
-      var text = lo;
-      var top = lo;
-      if (el.hasAttribute("data-q-max")) {
-        top = formatAmount(Number(el.getAttribute("data-q-max")) * factor, kind, places);
-        if (top !== lo) text = lo + (el.getAttribute("data-sep") || "–") + top;
+      var sep = el.getAttribute("data-sep") || "–";
+      var lo = Number(el.getAttribute("data-q")) * factor;
+      var hi = el.hasAttribute("data-q-max") ? Number(el.getAttribute("data-q-max")) * factor : null;
+      var loText, hiText, one, many;
+      if (converting) {
+        var c = convert(lo, hi, unit, target);
+        loText = c.lo; hiText = c.hi; one = c.one; many = c.many;
+      } else {
+        var kind = el.getAttribute("data-fmt");
+        var places = Number(el.getAttribute("data-places") || 0);
+        loText = formatAmount(lo, kind, places);
+        hiText = hi === null ? null : formatAmount(hi, kind, places);
+        if (u) { one = u.getAttribute("data-one"); many = u.getAttribute("data-many"); }
       }
-      setAmount(n, text);
-      if (u) u.textContent = amountValue(top) > 1 ? u.getAttribute("data-many") : u.getAttribute("data-one");
+      var top = hiText === null ? loText : hiText;
+      setAmount(n, hiText === null || hiText === loText ? loText : loText + sep + hiText);
+      if (u) u.textContent = amountValue(top) > 1 ? many : one;
+    });
+    /* "1/3 cup (80 mL)": hide the source's own conversion once the switch has converted the line */
+    $$("[data-qty-alt]").forEach(function (alt) {
+      var lead = alt.parentElement.querySelector("[data-q]");
+      var unit = lead && lead.getAttribute("data-unit");
+      alt.hidden = !!(target && unit && UNIT_INFO[unit] && UNIT_INFO[unit].sys !== target);
     });
   }
 
@@ -181,8 +236,26 @@
     }
     function atMin() { return base ? current <= 1 : current <= BATCH[0]; }
     function atMax() { return base ? current >= base * 4 : current >= BATCH[BATCH.length - 1]; }
+
+    /* US | Metric: US by default (metric recipes are converted); the reader's choice is
+       remembered across recipes, so picking Metric once switches the whole cookbook */
+    var primary = article.getAttribute("data-units") || "";
+    var units = store.get("dcb:units") || "us";
+    function target() { return primary && units !== primary ? units : null; }
+    jsAll("units").forEach(function (el) { el.hidden = !primary; });
+    jsAll("units-btn").forEach(function (b) {
+      b.addEventListener("click", function () {
+        units = b.getAttribute("data-units");
+        store.set("dcb:units", units);
+        renderServings();
+      });
+    });
+
     function renderServings() {
-      applyScale(factor());
+      applyAmounts(factor(), target());
+      jsAll("units-btn").forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-units") === units));
+      });
       jsAll("stepper-value").forEach(function (o) { o.textContent = label(); });
       jsAll("serves").forEach(function (s) {
         var lo = Number(s.getAttribute("data-lo"));
@@ -194,7 +267,7 @@
         note.hidden = factor() === 1;
       });
       var scaleNote = js("scale-note");
-      if (scaleNote) scaleNote.hidden = factor() === 1;
+      if (scaleNote) scaleNote.hidden = factor() === 1 && !target();
       /* aria-disabled instead of disabled, so keyboard focus never drops off the button */
       jsAll("stepper-dec").forEach(function (b) { b.setAttribute("aria-disabled", String(atMin())); });
       jsAll("stepper-inc").forEach(function (b) { b.setAttribute("aria-disabled", String(atMax())); });
@@ -693,6 +766,18 @@
       history.back();
     });
   }
+
+  /* The CSS page crossfade (@view-transition) rejects its promises when a quick second
+     navigation interrupts it. That's expected, so don't let it surface as an uncaught error. */
+  ["pageswap", "pagereveal"].forEach(function (type) {
+    window.addEventListener(type, function (e) {
+      var vt = e.viewTransition;
+      if (!vt) return;
+      ["ready", "finished", "updateCallbackDone"].forEach(function (name) {
+        if (vt[name] && vt[name].catch) vt[name].catch(function () { /* interrupted: fine */ });
+      });
+    });
+  });
 
   window.Cookbook = { formatAmount: formatAmount, amountValue: amountValue };
   safe(initTimers);

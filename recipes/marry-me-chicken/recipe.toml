@@ -15,9 +15,10 @@ signoff = "Serve warm over pasta or rice, and enjoy every last drop of sauce!"
 
 [photo]
 file = "hero"
-alt = "Seared chicken breasts in a creamy sun-dried tomato sauce in a steel skillet, with a spoon resting in the sauce"
+alt = "Golden chicken cutlets in a creamy parmesan sauce with sun-dried tomatoes and basil, in a steel skillet"
 focal = "50% 45%"
-credit = "supplied by the cookbook owner"
+credit = "Little Sunny Kitchen"
+credit_url = "https://littlesunnykitchen.com/marry-me-chicken/"
 
 [source]
 kind = "website"

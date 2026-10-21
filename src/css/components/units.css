@@ -1,0 +1,40 @@
+/* US | Metric switch: two joined, framed buttons; the active one is filled with ink. */
+@layer components {
+  .c-units {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .c-units__label {
+    margin-inline-end: var(--space-2xs);
+    font: 700 var(--text-xs) / 1 var(--font-label);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+
+  .c-units__btn {
+    min-block-size: var(--tap);
+    padding-inline: var(--space-s);
+    border: var(--frame);
+    background: var(--units-bg, transparent);
+    color: var(--units-fg, var(--ink));
+    font: var(--weight-strong) var(--text-sm) / 1 var(--font-text);
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+
+  .c-units__btn + .c-units__btn {
+    margin-inline-start: calc(-1 * var(--frame-w));
+  }
+
+  @media (hover: hover) {
+    .c-units__btn:hover {
+      --units-bg: var(--paper-2);
+    }
+  }
+
+  .c-units__btn[aria-pressed="true"] {
+    --units-bg: var(--ink);
+    --units-fg: var(--paper);
+  }
+}

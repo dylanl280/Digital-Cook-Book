@@ -11,6 +11,8 @@ mode (one step at a time, timers, screen kept awake) and a servings stepper.
 - **Cook:** press **Start cooking** for one step per screen. Swipe or use ← → to move, and tap a time
   to start a timer. Your screen stays on while cook mode is open.
 - **Servings:** use − and + to change them. Amounts and units adjust ("1 cup" becomes "2 cups").
+- **Units:** US by default; tap Metric to switch cups and ounces to mL and grams (spoons stay as they are).
+  The choice applies to every recipe.
 - **Check off** ingredients and steps by tapping them. Checks are kept for 12 hours.
 
 ## Add a recipe
