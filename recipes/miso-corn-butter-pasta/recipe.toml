@@ -19,7 +19,8 @@ notes = [
 file = "hero"
 alt = "Campanelle in a glossy miso brown-butter sauce with sweet corn, basil and black pepper, in a white bowl on a wooden slat table"
 focal = "50% 50%"
-credit = "supplied by the cookbook owner"
+credit = "@maxdelicious on TikTok"
+credit_url = "https://www.tiktok.com/@maxdelicious/video/7521378312996801823"
 
 [source]
 kind = "video"
